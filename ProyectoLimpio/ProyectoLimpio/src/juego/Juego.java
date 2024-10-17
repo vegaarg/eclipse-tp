@@ -84,11 +84,10 @@ public class Juego extends InterfaceJuego
 		if (entorno.estaPresionada('d') || entorno.estaPresionada(entorno.TECLA_DERECHA)){ // Si se presiona 'd' p 'flecha derecha' (derecha)
 			pep.movimientoDerecha();
 		}
-		if ((entorno.sePresiono('w') || entorno.sePresiono(entorno.TECLA_ARRIBA)) && !pep.saltando) {  // Si se presiona 'w' o 'flecha arriba' (salto)
+		if ((entorno.sePresiono('w') || entorno.sePresiono(entorno.TECLA_ARRIBA)) && pep.estaApoyado) {  // Si se presiona 'w' o 'flecha arriba' (salto)
 			pep.saltando = true;
 		}
 		pep.saltoYCaida(entorno);
-
 		// Manejo de entrada para la bola de fuego
 
 		if (!pep.cooldown()) {
