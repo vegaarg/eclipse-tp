@@ -44,14 +44,14 @@ public class Pep {
 
     public void movimientoIzquierda() {
         if (this.x > 0) {
-            this.x -= 2;
+            this.x -= 5;
             this.imgParado = Herramientas.cargarImagen("recursos/pepIzq.png");
             lado = true;
         }
     }
     public void movimientoDerecha() {
         if (this.x < 800) {
-            this.x += 2;
+            this.x += 5;
             this.imgParado = Herramientas.cargarImagen("recursos/pepDer.png");
             lado = false;
         }
@@ -64,14 +64,14 @@ public class Pep {
             this.y -= 6;                                                            // a saltar y va por ticks. longSalto es el limite a lo que llega el salto, que tambien va
             this.longSalto++;                                                       // por ticks
         }
-        if(this.longSalto > 18){                                                    // Chequea si la longitud de salto pasa de un numero. Este numero es el que tan alto puede
+        if(this.longSalto > 20){                                                    // Chequea si la longitud de salto pasa de un numero. Este numero es el que tan alto puede
             saltando=false;                                                         // puede saltar. Si es mayor, define al booleano saltando como falso y resetea la longitud.
             this.longSalto=0;
         }
     }
 
     public boolean detectarColision(int x, int y, int w, int h){                                                // Detecta colision.
-        return this.x < (x + w) + 25 && this.x + this.ancho > x - 25 && this.y + 10 < y + h && this.y + this.alto > y + 15;
+        return this.x < (x + w) + 20 && this.x + this.ancho > x - 40 && this.y + 5 < y + h && this.y + this.alto > y + 12;
     }
 
     public boolean cooldown() {
