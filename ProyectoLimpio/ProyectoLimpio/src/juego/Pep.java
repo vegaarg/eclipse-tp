@@ -58,7 +58,7 @@ public class Pep {
     }
     public void saltoYCaida(Entorno e) {
         if(!this.estaApoyado && !saltando) {                                        // Si no esta apoyado y no esta saltando, va cayendo (reduce su y) por tick. El numero
-            this.y += 3;                                                          // se puede aumentar o disminuir dependiendo de la velocidad de caida
+            this.y += 5;                                                          // se puede aumentar o disminuir dependiendo de la velocidad de caida
         }
         if(saltando) {                                                              // Si esta saltando (se activa la tecla) le resta el y. Esta es la velocidad a la que va
             this.y -= 6;                                                            // a saltar y va por ticks. longSalto es el limite a lo que llega el salto, que tambien va

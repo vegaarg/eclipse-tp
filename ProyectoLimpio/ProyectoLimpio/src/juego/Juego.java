@@ -27,6 +27,7 @@ public class Juego extends InterfaceJuego {
 	private Random random;
 	private boolean direccionDefinida = false;
 	private boolean direccionMovimiento;
+	private int prueba = 0;
 
     // Constantes
 
