@@ -13,6 +13,7 @@ public class Gnomo {
     int y;
     int ancho;
     int alto;
+    int contTicks;
     boolean estaApoyado;
     boolean lado;
     Image img;
@@ -39,30 +40,37 @@ public class Gnomo {
     }
     public void movimientoIzquierda() {
         if (this.x > 0) {
-            this.x -= 1;
-            this.img = Herramientas.cargarImagen("recursos/gnomo1.png");
+            this.x -= 3;
+            this.img = Herramientas.cargarImagen("recursos/gnomo2.png");
             lado = true;
         }
     }
 
     public void movimientoDerecha() {
         if (this.x < 800) {
-            this.x += 1;
-            this.img = Herramientas.cargarImagen("recursos/gnomo2.png");
+            this.x += 3;
+            this.img = Herramientas.cargarImagen("recursos/gnomo1.png");
             lado = false;
         }
     }
 
-//    public void saltoYCaida(Entorno e){
-//        if(!this.estaApoyado){
-//            this.y += 4;
-//        }
-//    }
+    public void saltoYCaida(Entorno e){
+        if(!this.estaApoyado){
+            this.y += 3;
+        }
+    }
 
     public boolean detectarColision(int x, int y, int w, int h){                                                // Detecta colision.
-        return this.x < (x + w) + 25 && this.x + this.ancho > x - 25 && this.y < y + h && this.y + this.alto > y + 5;
+        return this.x < (x + w) + 15 && this.x + this.ancho > x - 50 && this.y < y + h && this.y + this.alto > y + 3;
         
     }
 
+    public boolean cooldown() {
+        if (contTicks > 50) {
+            return false;
+        }
+        contTicks += 1;
+        return true;
+    }
 	
 } 

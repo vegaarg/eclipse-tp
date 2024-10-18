@@ -44,14 +44,14 @@ public class Pep {
 
     public void movimientoIzquierda() {
         if (this.x > 0) {
-            this.x -= 2;
+            this.x -= 5;
             this.imgParado = Herramientas.cargarImagen("recursos/pepIzq.png");
             lado = true;
         }
     }
     public void movimientoDerecha() {
         if (this.x < 800) {
-            this.x += 2;
+            this.x += 5;
             this.imgParado = Herramientas.cargarImagen("recursos/pepDer.png");
             lado = false;
         }
@@ -71,7 +71,7 @@ public class Pep {
     }
 
     public boolean detectarColision(int x, int y, int w, int h){                                                // Detecta colision.
-        return this.x < (x + w) + 25 && this.x + this.ancho > x - 25 && this.y + 10 < y + h && this.y + this.alto > y + 15;
+        return this.x < (x + w) + 20 && this.x + this.ancho > x - 40 && this.y + 5 < y + h && this.y + this.alto > y + 9;
     }
 
     public boolean cooldown() {

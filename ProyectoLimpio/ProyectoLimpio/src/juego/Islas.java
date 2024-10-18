@@ -40,7 +40,7 @@ public class Islas {
     }
 
     public void dibujarse(Entorno entorno){
-        entorno.dibujarImagen(this.img, this.x, this.y, 0, 0.1);    //Dibuja al personaje en pantalla
+        entorno.dibujarImagen(this.img, this.x, this.y, 0, 0.15);    //Dibuja al personaje en pantalla
     }
 
     @Override
@@ -53,8 +53,8 @@ public class Islas {
             return;
         }
 
-        Islas islaIzq = new Islas(isla.x - 80, isla.y + 100, isla.ancho, isla.alto);
-        Islas islaDer = new Islas(isla.x + 80, isla.y + 100, isla.ancho, isla.alto);
+        Islas islaIzq = new Islas(isla.x - 80, isla.y + 110, isla.ancho, isla.alto);
+        Islas islaDer = new Islas(isla.x + 80, isla.y + 110, isla.ancho, isla.alto);
 
         isla.der = islaDer;
         isla.izq = islaIzq;

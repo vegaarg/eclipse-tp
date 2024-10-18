@@ -1,5 +1,6 @@
 package juego;
 
+import java.awt.Color;
 import java.awt.Image;
 import java.util.Random;
 
@@ -12,12 +13,20 @@ public class Juego extends InterfaceJuego {
     private Entorno entorno;
 
     // Variables del juego
-    private Image Fondo;
-    private Pep pep;
-    private BolaDeFuego bola;
-    private Tortugas tort1;
-    private Gnomo gnomo1;
-    private Islas islaBase = new Islas(400, 100, 25, 5);
+
+	private Image Fondo;
+	private Pep pep;
+	private BolaDeFuego bola;
+	private Tortugas tort1;
+	private Gnomo gnomo;
+	private Gnomo[] gnomosLista;
+	private Islas islaBase = new Islas(400, 80, 50, 5);
+	private int gnomosSalvados;
+	private int gnomosPerdidos;
+	private boolean randomBooleano;
+	private Random random;
+	private boolean direccionDefinida = false;
+	private boolean direccionMovimiento;
 
     // Constantes
 
@@ -32,11 +41,13 @@ public class Juego extends InterfaceJuego {
         // Inicialización de recursos
         Fondo = Herramientas.cargarImagen("recursos/fondo.png");
         Islas.popular(4, islaBase);  // Popular las islas recursivamente
+		this.gnomosSalvados = 0;
+		this.gnomosPerdidos = 0;
 
         // Inicializar personajes
-        pep = new Pep(200, 250, 50, 30, Herramientas.cargarImagen("recursos/pepDer.png"));
+        pep = new Pep(400, 450, 50, 30, Herramientas.cargarImagen("recursos/pepDer.png"));
         tort1 = new Tortugas(200, 200, 30, 50);
-        gnomo1 = new Gnomo(400, 70, 15, 30);
+        gnomo = new Gnomo(400, 50, 15, 30);
     }
 
     @Override
@@ -47,8 +58,20 @@ public class Juego extends InterfaceJuego {
         // Dibujar cosas en la pantalla
         pep.dibujarse(entorno);
         tort1.dibujarse(entorno);
-        gnomo1.dibujarse(entorno);
+        
+		if(gnomo != null) {
+			gnomo.dibujarse(entorno);
+			gnomo.contTicks = 0;
+		} else {
+			gnomo = new Gnomo(400, 50, 15, 30);
+		}
+		
         dibujarIslas(islaBase); // Dibujar islas
+        
+		/// HUD (texto en pantalla)
+		entorno.cambiarFont("Impact", 20, Color.white);
+		entorno.escribirTexto("Puntos: " + gnomosSalvados, 8, 25);
+		entorno.escribirTexto("Gnomos Perdidos: " + gnomosPerdidos, 8, 50);
 
         // Manejo de entrada para el movimiento de Pep
         manejarMovimientoPep();
@@ -95,20 +118,41 @@ public class Juego extends InterfaceJuego {
     ///colisiones al estar en plataformas
     private void manejarColisiones() {
         pep.estaApoyado = estaApoyado(islaBase);
-        gnomo1.estaApoyado = gnomoEstaApoyado(islaBase);
+        gnomo.estaApoyado = gnomoEstaApoyado(islaBase);
     }
     //mover el gnomo   ////pensaba en hacerlo aleatorio pero al siempre estar confirmando su colicion, el gnomo no para de cambiar de direccion
     private void moverGnomo() {
-        if (!gnomo1.estaApoyado) {
-            gnomo1.y += 2;
-        } else {
-        	int direccionGnomo = direccion();
-            if (direccionGnomo == 1 ) {
-                gnomo1.movimientoIzquierda();
-            } else {
-                gnomo1.movimientoDerecha();
-            }
-        }
+    	if (gnomo != null) {                                                        // Revisa si el gnomo no es null
+			gnomo.estaApoyado = gnomoEstaApoyado(islaBase);
+
+			if (gnomoEstaApoyado(islaBase)) {
+				if (!direccionDefinida) {
+					direccionMovimiento = random();
+					direccionDefinida = true;
+				}
+
+				if (direccionMovimiento) {
+					gnomo.movimientoDerecha();
+				} else {
+					gnomo.movimientoIzquierda();
+				}
+			}
+
+			if (!gnomo.estaApoyado) {
+				gnomo.saltoYCaida(entorno);
+				direccionDefinida = false;                            // Caida del gnomo
+			}
+
+			if (gnomo.detectarColision(pep.x, pep.y, pep.ancho, pep.alto)) {            // Pep recoge al gnomo y le suma un punto
+				gnomo = null;
+				gnomosSalvados++;
+			}
+
+//			if (gnomo.y > 700){
+//				gnomo = null;										/// ESTO TIRA ERROR!!! Es para cuando se caiga, mas tarde lo arreglo
+//				gnomosPerdidos++;
+//			}
+		}
     }
 
     public static void main(String[] args) {
@@ -130,13 +174,16 @@ public class Juego extends InterfaceJuego {
 
     public boolean gnomoEstaApoyado(Islas isla) {
         if (isla == null) return false;
-        boolean apoyado = gnomo1.detectarColision(isla.x, isla.y, isla.ancho, isla.alto);
-        gnomo1.estaApoyado = apoyado;
+        boolean apoyado = gnomo.detectarColision(isla.x, isla.y, isla.ancho, isla.alto);
+        gnomo.estaApoyado = apoyado;
         return apoyado || gnomoEstaApoyado(isla.izq) || gnomoEstaApoyado(isla.der);
     }
 
-    public static int direccion() {
-        Random random = new Random(); // Crear una nueva instancia de Random
-        return random.nextInt(10);
+    
+	public boolean random(){
+		random = new Random();
+		randomBooleano = random.nextBoolean();
+
+        return randomBooleano;
 	}
 }
