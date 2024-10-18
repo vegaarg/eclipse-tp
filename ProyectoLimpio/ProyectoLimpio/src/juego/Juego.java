@@ -138,21 +138,24 @@ public class Juego extends InterfaceJuego {
 					gnomo.movimientoIzquierda();
 				}
 			}
-
+			
 			if (!gnomo.estaApoyado) {
 				gnomo.saltoYCaida(entorno);
 				direccionDefinida = false;                            // Caida del gnomo
 			}
-
+			
 			if (gnomo.detectarColision(pep.x, pep.y, pep.ancho, pep.alto)) {            // Pep recoge al gnomo y le suma un punto
 				gnomo = null;
 				gnomosSalvados++;
 			}
+			
+			if (gnomo != null){
+				if (gnomo.y > 700) {
+					gnomo = null;														/// ESTO TIRA ERROR!!! Es para cuando se caiga, mas tarde lo arreglo
+					gnomosPerdidos++;
+				}
+			}
 
-//			if (gnomo.y > 700){
-//				gnomo = null;										/// ESTO TIRA ERROR!!! Es para cuando se caiga, mas tarde lo arreglo
-//				gnomosPerdidos++;
-//			}
 		}
     }
 
