@@ -27,12 +27,12 @@ public class BolaDeFuego {
     }
 
     public void movimientoIzquierda() {
-        if (this.x > 0) {
+        if (this.x > -50) {
             this.x -= 5;
         }
     }
     public void movimientoDerecha() {
-        if (this.x < 800) {
+        if (this.x < 850) {
             this.x += 5;
         }
     }

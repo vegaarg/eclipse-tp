@@ -40,7 +40,7 @@ public class Gnomo {
     }
     public void movimientoIzquierda() {
         if (this.x > 0) {
-            this.x -= 3;
+            this.x -= 1;
             this.img = Herramientas.cargarImagen("recursos/gnomo2.png");
             lado = true;
         }
@@ -48,7 +48,7 @@ public class Gnomo {
 
     public void movimientoDerecha() {
         if (this.x < 800) {
-            this.x += 3;
+            this.x += 1;
             this.img = Herramientas.cargarImagen("recursos/gnomo1.png");
             lado = false;
         }

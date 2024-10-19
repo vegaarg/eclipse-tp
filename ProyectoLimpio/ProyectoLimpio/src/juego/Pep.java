@@ -44,27 +44,27 @@ public class Pep {
 
     public void movimientoIzquierda() {
         if (this.x > 0) {
-            this.x -= 5;
+            this.x -= 2;
             this.imgParado = Herramientas.cargarImagen("recursos/pepIzq.png");
             lado = true;
         }
     }
     public void movimientoDerecha() {
         if (this.x < 800) {
-            this.x += 5;
+            this.x += 2;
             this.imgParado = Herramientas.cargarImagen("recursos/pepDer.png");
             lado = false;
         }
     }
     public void saltoYCaida(Entorno e) {
-        if(!this.estaApoyado && !saltando) {                                        // Si no esta apoyado y no esta saltando, va cayendo (reduce su y) por tick. El numero
-            this.y += 5;                                                          // se puede aumentar o disminuir dependiendo de la velocidad de caida
+        if(!this.estaApoyado && !saltando) {                                       // Si no esta apoyado y no esta saltando, va cayendo (reduce su y) por tick. El numero
+            this.y += 4;                                                          // se puede aumentar o disminuir dependiendo de la velocidad de caida
         }
         if(saltando) {                                                              // Si esta saltando (se activa la tecla) le resta el y. Esta es la velocidad a la que va
             this.y -= 6;                                                            // a saltar y va por ticks. longSalto es el limite a lo que llega el salto, que tambien va
             this.longSalto++;                                                       // por ticks
         }
-        if(this.longSalto > 20){                                                    // Chequea si la longitud de salto pasa de un numero. Este numero es el que tan alto puede
+        if(this.longSalto > 23){                                                    // Chequea si la longitud de salto pasa de un numero. Este numero es el que tan alto puede
             saltando=false;                                                         // puede saltar. Si es mayor, define al booleano saltando como falso y resetea la longitud.
             this.longSalto=0;
         }
@@ -75,7 +75,7 @@ public class Pep {
     }
 
     public boolean cooldown() {
-        if (contTicks > 100) {
+        if (contTicks > 160) {
             return false;
         }
         contTicks += 1;

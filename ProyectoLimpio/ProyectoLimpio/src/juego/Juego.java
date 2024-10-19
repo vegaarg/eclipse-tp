@@ -19,10 +19,12 @@ public class Juego extends InterfaceJuego {
 	private BolaDeFuego bola;
 	private Tortugas tort1;
 	private Gnomo gnomo;
+	private Gnomo gnomo2;
 	private Gnomo[] gnomosLista;
 	private Islas islaBase = new Islas(400, 80, 50, 5);
 	private int gnomosSalvados;
 	private int gnomosPerdidos;
+	private int vidasPerdidos;
 	private boolean randomBooleano;
 	private Random random;
 	private boolean direccionDefinida = false;
@@ -44,18 +46,20 @@ public class Juego extends InterfaceJuego {
         Islas.popular(4, islaBase);  // Popular las islas recursivamente
 		this.gnomosSalvados = 0;
 		this.gnomosPerdidos = 0;
+		this.vidasPerdidos =0;
 
         // Inicializar personajes
         pep = new Pep(400, 450, 50, 30, Herramientas.cargarImagen("recursos/pepDer.png"));
         tort1 = new Tortugas(200, 200, 30, 50);
         gnomo = new Gnomo(400, 50, 15, 30);
+
     }
 
     @Override
     public void tick() {
         // Procesamiento de tiempo
         entorno.dibujarImagen(Fondo, 400, 300, 0); // Fondo del juego
-
+        
         // Dibujar cosas en la pantalla
         pep.dibujarse(entorno);
         tort1.dibujarse(entorno);
@@ -73,7 +77,7 @@ public class Juego extends InterfaceJuego {
 		entorno.cambiarFont("Impact", 20, Color.white);
 		entorno.escribirTexto("Puntos: " + gnomosSalvados, 8, 25);
 		entorno.escribirTexto("Gnomos Perdidos: " + gnomosPerdidos, 8, 50);
-
+		entorno.escribirTexto("Vidas Perdidos: " + vidasPerdidos, 8, 75);
         // Manejo de entrada para el movimiento de Pep
         manejarMovimientoPep();
         pep.saltoYCaida(entorno); // Manejo de gravedad y saltos
@@ -98,6 +102,13 @@ public class Juego extends InterfaceJuego {
         if ((entorno.sePresiono('w') || entorno.sePresiono(entorno.TECLA_ARRIBA)) && pep.estaApoyado) {
             pep.saltando = true;
         }
+		if (pep != null){
+			if (pep.y > 700) {
+				pep = null;
+				pep = new Pep(400, 450, 50, 30, Herramientas.cargarImagen("recursos/pepDer.png"));
+				vidasPerdidos++;
+			}
+		}
     }
     /// Funcion de bola de fuego
     private void manejarBolaDeFuego() {
@@ -151,7 +162,7 @@ public class Juego extends InterfaceJuego {
 			
 			if (gnomo != null){
 				if (gnomo.y > 700) {
-					gnomo = null;														/// ESTO TIRA ERROR!!! Es para cuando se caiga, mas tarde lo arreglo
+					gnomo = null;														
 					gnomosPerdidos++;
 				}
 			}

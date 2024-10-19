@@ -36,7 +36,7 @@ public class Islas {
     }
 
     public void dibujarHitbox(Entorno entorno){                                  // Dibuja un rectangulo azul. Esto vamos a usarlo
-        entorno.dibujarRectangulo(x, y, ancho, alto, 0, myColor);         // despues para ver la hitbox de la plataforma.
+        entorno.dibujarRectangulo(x, y, ancho, alto, 0, myColor);                // despues para ver la hitbox de la plataforma.
     }
 
     public void dibujarse(Entorno entorno){
