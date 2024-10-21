@@ -2,32 +2,35 @@ package juego;
 
 import java.awt.Color;
 import java.awt.Image;
-import java.awt.Rectangle;
+
 import entorno.Entorno;
 import entorno.Herramientas;
+import juego.Utilidades;
 
-import java.util.Random;
-import java.util.random.*;
 public class Gnomo {
     int x;
     int y;
     int ancho;
     int alto;
     int contTicks;
+    int velocidad = 2;
     boolean estaApoyado;
+    boolean direccionDefinida;
     boolean lado;
-    Image img;
+    Image imgDer;
+    Image imgIzq;
     Color myColor = Color.ORANGE;
 
-    public Gnomo(int x, int y, int ancho, int alto){
+    public Gnomo(int x, int y, int ancho, int alto, boolean lado){
         this.x = x;
         this.y = y;
         this.ancho = ancho;
         this.alto = alto;
-        this.img = Herramientas.cargarImagen("recursos/gnomo1.png");
-        this.img = Herramientas.cargarImagen("recursos/gnomo2.png");
-        lado = false;
+        this.imgDer = Herramientas.cargarImagen("recursos/gnomo1.png");
+        this.imgIzq = Herramientas.cargarImagen("recursos/gnomo2.png");
+        this.lado = lado;
         this.estaApoyado = false;
+        direccionDefinida = false;
     }
 
     public void dibujarHitbox(Entorno entorno){                                  // Dibuja un rectangulo azul. Esto vamos a usarlo
@@ -35,26 +38,30 @@ public class Gnomo {
     }
 
     public void dibujarse(Entorno entorno){
-        entorno.dibujarImagen(this.img, this.x, this.y, 0, 1);     //Dibuja al personaje en pantalla
+        if (lado) {
+            entorno.dibujarImagen(this.imgDer, this.x, this.y, 0, 1);     //Dibuja al personaje en pantalla
+        } else {
+            entorno.dibujarImagen(this.imgIzq, this.x, this.y, 0, 1);
+        }
         
     }
     public void movimientoIzquierda() {
         if (this.x > 0) {
-            this.x -= 1;
-            this.img = Herramientas.cargarImagen("recursos/gnomo2.png");
-            lado = true;
+            this.x -= velocidad;
+//            this.img = Herramientas.cargarImagen("recursos/gnomo2.png");
+//            lado = true;
         }
     }
 
     public void movimientoDerecha() {
         if (this.x < 800) {
-            this.x += 1;
-            this.img = Herramientas.cargarImagen("recursos/gnomo1.png");
-            lado = false;
+            this.x += velocidad;
+//            this.img = Herramientas.cargarImagen("recursos/gnomo1.png");
+//            lado = false;
         }
     }
 
-    public void saltoYCaida(Entorno e){
+    public void saltoYCaida(){
         if(!this.estaApoyado){
             this.y += 3;
         }
@@ -66,11 +73,48 @@ public class Gnomo {
     }
 
     public boolean cooldown() {
-        if (contTicks > 50) {
+        if (contTicks > 20) {
             return false;
         }
         contTicks += 1;
         return true;
     }
-	
+
+    /*
+    public boolean gnomoEstaApoyado(Islas isla) {
+        if (isla == null) return false;
+        boolean apoyado = this.detectarColision(isla.x, isla.y, isla.ancho, isla.alto);
+        this.estaApoyado = apoyado;
+        return apoyado || gnomoEstaApoyado(isla.izq) || gnomoEstaApoyado(isla.der);
+    }
+     */
+
+    public boolean gnomoEstaApoyado(Islas isla) {
+        if (isla == null) return false;
+        boolean apoyado = this.detectarColision(isla.x, isla.y, isla.ancho, isla.alto);                /// deberia ser un metodo
+        this.estaApoyado = apoyado;
+        return apoyado || gnomoEstaApoyado(isla.izq) || gnomoEstaApoyado(isla.der);
+    }
+    public void moverGnomo(Islas isla) {
+            this.estaApoyado = gnomoEstaApoyado(isla);
+
+            if (this.estaApoyado) {
+                if (!direccionDefinida) {
+                    this.lado = Utilidades.randomBoolean(); //random();
+                    direccionDefinida = true;
+                }
+                if (this.lado) {
+                    this.movimientoDerecha();
+
+                } else {
+                    this.movimientoIzquierda();
+                }
+            }
+
+        if (!this.estaApoyado) {
+            this.y += 3;                                           // :tiger2:
+            direccionDefinida = false;                            // Caida del gnomo
+        }
+    }
+
 } 
