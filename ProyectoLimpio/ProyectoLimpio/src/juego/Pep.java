@@ -25,7 +25,7 @@ public class Pep {
     BolaDeFuego bola;
     int longSalto;
     int contTicks = 0;
-    int velocidad = 4;
+    int velocidad = 3;
     boolean lado;
 
     public Pep(int x, int y, int alto, int ancho, Image img){
@@ -70,7 +70,7 @@ public class Pep {
             this.y -= 6;                                                            // a saltar y va por ticks. longSalto es el limite a lo que llega el salto, que tambien va
             this.longSalto++;                                                       // por ticks
         }
-        if(this.longSalto > 23){                                                    // Chequea si la longitud de salto pasa de un numero. Este numero es el que tan alto puede
+        if(this.longSalto > 25){                                                    // Chequea si la longitud de salto pasa de un numero. Este numero es el que tan alto puede
             saltando=false;                                                         // puede saltar. Si es mayor, define al booleano saltando como falso y resetea la longitud.
             this.longSalto=0;
         }

@@ -13,7 +13,7 @@ public class Gnomo {
     int ancho;
     int alto;
     int contTicks;
-    int velocidad = 2;
+    int velocidad = 1;
     boolean estaApoyado;
     boolean direccionDefinida;
     boolean lado;
@@ -39,7 +39,7 @@ public class Gnomo {
 
     public void dibujarse(Entorno entorno){
         if (lado) {
-            entorno.dibujarImagen(this.imgDer, this.x, this.y, 0, 1);     //Dibuja al personaje en pantalla
+            entorno.dibujarImagen(this.imgDer, this.x, this.y, 0, 1);     //Dibuja al personaje en pantalla, Si lado es falso dibuja el izquierdo, si es true, muestra el derecho.
         } else {
             entorno.dibujarImagen(this.imgIzq, this.x, this.y, 0, 1);
         }

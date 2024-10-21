@@ -44,15 +44,15 @@ public class Juego extends InterfaceJuego {
         Islas.popular(4, islaBase);  // Popular las islas recursivamente
         this.gnomosSalvados = 0;
         this.gnomosPerdidos = 0;
-        this.vidasPerdidos = 0;
+        this.vidasPerdidos = 3;
 
         // Inicializar personajes
-        pep = new Pep(400, 450, 50, 30, Herramientas.cargarImagen("recursos/pepDer.png"));
-        tort1 = new Tortugas(200, 200, 30, 50);
+        pep = new Pep(400, 450, 50, 15, Herramientas.cargarImagen("recursos/pepDer.png"));
+        tort1 = new Tortugas(200, 200, 35, 30);
         gnomosLista = new Gnomo[tamanioLista];
 
         for (int i = 0; i < tamanioLista; i++) {
-            gnomosLista[i] = new Gnomo(400, 50, 15, 30, Utilidades.randomBoolean());
+            gnomosLista[i] = new Gnomo(400, 50, 10, 30, Utilidades.randomBoolean());
         }
     }
 
@@ -68,7 +68,7 @@ public class Juego extends InterfaceJuego {
         for (int i = 0; i < tamanioLista; i++) {
             if (gnomosLista[i] != null){
                 gnomosLista[i].dibujarse(entorno);
-                gnomosLista[i].contTicks = 0;
+                gnomosLista[i].contTicks = 3;
             } else {
                 gnomosLista[i] = new Gnomo(400, 50, 15, 30, Utilidades.randomBoolean());
             }
@@ -93,13 +93,13 @@ public class Juego extends InterfaceJuego {
         // Manejo de colisiones
         manejarColisiones();
 
+        // Movimiento del gnomo
         for (Gnomo gnomo:gnomosLista) {
             if (gnomo != null) {
                 manejarColisionesGnomo(gnomo);
             }
         }
 
-        // Movimiento del gnomo
         for (int i = 0; i < tamanioLista; i++) {
             if (gnomosLista[i] != null) {
                 gnomosLista[i].moverGnomo(islaBase);
@@ -107,7 +107,11 @@ public class Juego extends InterfaceJuego {
             gnomoColision(i);
             gnomoPerdido(i);
         }
+        /// Movimiento Tortuga
+        moverTortuga();
     }
+   
+
 
     /// movimiento de pep
     private void manejarMovimientoPep() {
@@ -124,7 +128,7 @@ public class Juego extends InterfaceJuego {
             if (pep.y > 700) {
                 pep = null;
                 pep = new Pep(400, 450, 50, 30, Herramientas.cargarImagen("recursos/pepDer.png"));
-                vidasPerdidos++;
+                vidasPerdidos--;
             }
         }
     }
@@ -171,7 +175,30 @@ public class Juego extends InterfaceJuego {
         }
 
     }
+ // mover las tortugas 
+    private void moverTortuga() {
+    	if (tort1!= null) {                                                        // Revisa si el gnomo no es null
+    		tort1.estaApoyado =tort1EstaApoyado(islaBase);
 
+			if (tort1EstaApoyado(islaBase)) {
+				if (!direccionDefinida) {
+					direccionMovimiento = random2();
+					direccionDefinida = true;
+				}
+
+				if (direccionMovimiento) {
+					tort1.movimientoDerecha();
+				} else {
+					tort1.movimientoIzquierda();
+				}
+			}
+			
+			if (!tort1.estaApoyado) {
+				tort1.saltoYCaida(entorno);
+				direccionDefinida = false;                            // Caida del gnomo
+			}
+		}
+    }
     private void manejarColisionesGnomo(Gnomo gnomo){
         gnomo.gnomoEstaApoyado(islaBase);
     }
@@ -212,10 +239,23 @@ public class Juego extends InterfaceJuego {
         return pep.detectarColision(isla.x, isla.y, isla.ancho, isla.alto) ||
                estaApoyado(isla.izq) || estaApoyado(isla.der);
     }
+    public boolean tort1EstaApoyado(Islas isla) {
+        if (isla == null) return false;
+        boolean apoyado = tort1.detectarColision(isla.x, isla.y, isla.ancho, isla.alto);
+        tort1.estaApoyado = apoyado;
+        return apoyado || tort1EstaApoyado(isla.izq) || tort1EstaApoyado(isla.der);
+    }
+
     
 	public boolean random(){
 		random = new Random();
 		randomBooleano = random.nextBoolean();
+		return randomBooleano;
+	
+    }
+		public boolean random2(){
+			random = new Random();
+			randomBooleano = random.nextBoolean();
 
         return randomBooleano;
 	}
