@@ -22,8 +22,8 @@ public class Juego extends InterfaceJuego {
     private Islas islaBase = new Islas(400, 80, 50, 5);
     private int gnomosSalvados;
     private int gnomosPerdidos;
-    private int vidasPerdidos;
-    private int tortugasPerdidos;
+    private int vidasPerdidas;
+    private int tortugasPerdidas;
     private boolean randomBooleano;
     private Random random;
     private boolean direccionDefinida = false;
@@ -45,13 +45,14 @@ public class Juego extends InterfaceJuego {
         Islas.popular(4, islaBase);  // Popular las islas recursivamente
         this.gnomosSalvados = 0;
         this.gnomosPerdidos = 0;
-        this.vidasPerdidos = 3;
-        this.tortugasPerdidos = 0;
+        this.vidasPerdidas = 3;
+        this.tortugasPerdidas = 0;
 
         // Inicializar personajes
         pep = new Pep(400, 450, 50, 15, Herramientas.cargarImagen("recursos/pepDer.png"));
         tortugasLista = new Tortugas[tamanioLista];
         gnomosLista = new Gnomo[tamanioLista];
+        bola = new BolaDeFuego(-200, -200, 20, 20, pep.lado,Herramientas.cargarImagen(pep.lado ? "recursos/bolaDeFuego2.gif" : "recursos/bolaDeFuego1.gif"));
 
         for (int i = 0; i < tamanioLista; i++) {
             tortugasLista[i] = new Tortugas(400, 50, 10, 30, Utilidades.randomBoolean());
@@ -94,7 +95,8 @@ public class Juego extends InterfaceJuego {
         entorno.cambiarFont("Impact", 20, Color.white);
         entorno.escribirTexto("Puntos: " + gnomosSalvados, 8, 25);
         entorno.escribirTexto("Gnomos Perdidos: " + gnomosPerdidos, 8, 50);
-        entorno.escribirTexto("Vidas Perdidos: " + vidasPerdidos, 8, 75);
+        entorno.escribirTexto("Vidas Perdidos: " + vidasPerdidas, 8, 75);
+        entorno.escribirTexto("Tortugas Muertas: " + tortugasPerdidas, 8, 100);
 
         // Manejo de entrada para el movimiento de Pep
         manejarMovimientoPep();
@@ -149,8 +151,8 @@ public class Juego extends InterfaceJuego {
         if (pep != null) {
             if (pep.y > 700) {
                 pep = null;
-                pep = new Pep(400, 450, 50, 30, Herramientas.cargarImagen("recursos/pepDer.png"));
-                vidasPerdidos--;
+                pep = new Pep(50, 300, 50, 30, Herramientas.cargarImagen("recursos/pepDer.png"));
+                vidasPerdidas--;
             }
         }
     }
@@ -222,21 +224,16 @@ public class Juego extends InterfaceJuego {
         }
     }
     // mover las tortugas 
-    
-    
-	
-    
-    	private void manejarColisionesTortuga(Tortugas tortuga){
-    		tortuga.tortugaEstaApoyado(islaBase);
-    	}
-
-    	    public void tortugaColision(int num) {
-    	        if (tortugasLista[num] == null){
-    	            return;
-    	        }
-    	        if (tortugasLista[num].detectarColision(pep.x, pep.y, pep.ancho, pep.alto)) {            // Pep recoge al gnomo y le suma un punto
+    private void manejarColisionesTortuga(Tortugas tortuga){
+    	tortuga.tortugaEstaApoyado(islaBase);
+   	}
+        public void tortugaColision(int num) {
+    	       if (tortugasLista[num] == null){
+    	           return;
+    	      }
+    	        if (tortugasLista[num].detectarColision(bola.x, bola.y, bola.ancho, bola.alto)) {            // bola mata tortuga y le suma un punto
     	            tortugasLista[num] = null;
-    	            gnomosSalvados++;
+    	            tortugasPerdidas++;
     	        }
     	    }     
     	 public void tortugaPerdido(int num) {
@@ -245,8 +242,12 @@ public class Juego extends InterfaceJuego {
     	 }
     		if (tortugasLista[num].y > 700) {
     			tortugasLista[num] = null;
-    			tortugasPerdidos++;
     		}
+    		if (tortugasLista[num].detectarColision(pep.x, pep.y, pep.ancho, pep.alto)) {            // bola mata tortuga y le suma un punto
+	            pep = null;
+	            pep = new Pep(50, 300, 50, 30, Herramientas.cargarImagen("recursos/pepDer.png"));
+	            vidasPerdidas--;
+	        }
     }
 
     public static void main(String[] args) {
