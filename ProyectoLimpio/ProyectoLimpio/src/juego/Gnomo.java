@@ -13,7 +13,7 @@ public class Gnomo {
     int ancho;
     int alto;
     int contTicks;
-    int velocidad = 1;
+    double velocidad = 1;
     boolean estaApoyado;
     boolean direccionDefinida;
     boolean lado;
@@ -26,16 +26,16 @@ public class Gnomo {
         this.y = y;
         this.ancho = ancho;
         this.alto = alto;
-        this.imgDer = Herramientas.cargarImagen("recursos/gnomo1.png");
-        this.imgIzq = Herramientas.cargarImagen("recursos/gnomo2.png");
+        this.imgDer = Herramientas.cargarImagen("recursos/gnomoDer.gif");
+        this.imgIzq = Herramientas.cargarImagen("recursos/gnomoIzq.gif");
         this.lado = lado;
         this.estaApoyado = false;
         direccionDefinida = false;
     }
 
-    public void dibujarHitbox(Entorno entorno){                                  // Dibuja un rectangulo azul. Esto vamos a usarlo
-        entorno.dibujarRectangulo(x, y, ancho, alto, 0, myColor);         // despues para ver la hitbox de la plataforma.
-    }
+//    public void dibujarHitbox(Entorno entorno){                                  // Dibuja un rectangulo azul. Esto vamos a usarlo
+//        entorno.dibujarRectangulo(x, y, ancho, alto, 0, myColor);         // despues para ver la hitbox de la plataforma.
+//    }
 
     public void dibujarse(Entorno entorno){
         if (lado) {
@@ -61,11 +61,6 @@ public class Gnomo {
         }
     }
 
-    public void saltoYCaida(){
-        if(!this.estaApoyado){
-            this.y += 3;
-        }
-    }
 
     public boolean detectarColision(int x, int y, int w, int h){                                                // Detecta colision.
         return this.x < (x + w) + 15 && this.x + this.ancho > x - 50 && this.y < y + h && this.y + this.alto > y + 3;
@@ -73,7 +68,7 @@ public class Gnomo {
     }
 
     public boolean cooldown() {
-        if (contTicks > 20) {
+        if (contTicks > 1) {
             return false;
         }
         contTicks += 1;

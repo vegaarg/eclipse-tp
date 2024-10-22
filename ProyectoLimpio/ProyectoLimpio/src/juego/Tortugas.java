@@ -41,22 +41,14 @@ public class Tortugas {
 public void movimientoIzquierda() {
     if (this.x > 0) {
         this.x -= velocidad;
-//        this.img = Herramientas.cargarImagen("recursos/gnomo2.png");
-//        lado = true;
+        this.img = Herramientas.cargarImagen("recursos/tortuga.png");
     }
 }
 
 public void movimientoDerecha() {
     if (this.x < 800) {
         this.x += velocidad;
-//        this.img = Herramientas.cargarImagen("recursos/gnomo1.png");
-//        lado = false;
-    }
-}
-
-public void saltoYCaida(){
-    if(!this.estaApoyado){
-        this.y += 3;
+        this.img = Herramientas.cargarImagen("recursos/tortuga2.png");
     }
 }
 

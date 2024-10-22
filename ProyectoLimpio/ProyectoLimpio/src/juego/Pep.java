@@ -16,7 +16,10 @@ public class Pep {
     int y;
     int ancho;
     int alto;
-    Image imgParado;
+    Image imgDer;
+    Image imgIzq;
+    Image imgMovDer;
+    Image imgMovIzq;
     Image imgBola;
     Color myColor = Color.green;
     boolean seMueve;
@@ -25,7 +28,7 @@ public class Pep {
     BolaDeFuego bola;
     int longSalto;
     int contTicks = 0;
-    int velocidad = 3;
+    int velocidad = 2;
     boolean lado;
 
     public Pep(int x, int y, int alto, int ancho, Image img){
@@ -33,34 +36,56 @@ public class Pep {
         this.y = y;
         this.ancho = ancho;
         this.alto = alto;
-        this.imgParado = Herramientas.cargarImagen("recursos/pepDer.png");
+        this.imgDer = Herramientas.cargarImagen("recursos/idlepepDer.gif");
+        this.imgIzq = Herramientas.cargarImagen("recursos/idlepepIzq.gif");
+        this.imgMovDer = Herramientas.cargarImagen("recursos/mover.gif");
+        this.imgMovIzq = Herramientas.cargarImagen("recursos/moverizq.gif");
         this.seMueve = false;
         this.estaApoyado = false;
         this.saltando = false;
         this.longSalto=0;
         lado = false;               // Lado en false equivale a la derecha, en true equivale a la izquierda
     }
-
     public void dibujarHitbox(Entorno entorno){                                  // Dibuja un rectangulo azul. Esto vamos a usarlo
         entorno.dibujarRectangulo(x, y, ancho, alto, 0, myColor);         // despues para ver la hitbox de la plataforma.
     }
-    public void dibujarse(Entorno entorno){
-        entorno.dibujarImagen(this.imgParado, this.x, this.y, 0, 0.7);    //Dibuja al personaje en pantalla
+    public void dibujarse(Entorno entorno) {
+        if (seMueve) {
+            // Muestra el GIF correspondiente según la dirección
+            if (lado) {
+                entorno.dibujarImagen(this.imgMovIzq, this.x, this.y, 0, 0.7); // Dibuja el GIF de movimiento a la izquierda
+            } else {
+                entorno.dibujarImagen(this.imgMovDer, this.x, this.y, 0, 0.7); // Dibuja el GIF de movimiento a la derecha
+            }
+        } else {
+            // Cuando está parado, usa la imagen según la dirección
+            if (lado) {
+                // Si está mirando a la izquierda
+                entorno.dibujarImagen(this.imgIzq, this.x, this.y, 0, 0.7); // Usa la imagen de quieto hacia la izquierda
+            } else {
+                // Si está mirando a la derecha
+                entorno.dibujarImagen(this.imgDer, this.x, this.y, 0, 0.7); // Usa la imagen de quieto hacia la derecha
+            }
+        }
     }
 
     public void movimientoIzquierda() {
         if (this.x > 0) {
             this.x -= velocidad;
-            this.imgParado = Herramientas.cargarImagen("recursos/pepIzq.png");
-            lado = true;
+            lado = true; // Cambia la dirección a izquierda
+            seMueve = true; // Cambia a verdadero cuando se mueve
         }
     }
+
     public void movimientoDerecha() {
         if (this.x < 800) {
             this.x += velocidad;
-            this.imgParado = Herramientas.cargarImagen("recursos/pepDer.png");
-            lado = false;
+            lado = false; // Cambia la dirección a derecha
+            seMueve = true; // Cambia a verdadero cuando se mueve
         }
+    }
+    public void detenerMovimiento() {
+        this.seMueve = false;  // Cambia el estado a detenido
     }
     public void saltoYCaida(Entorno e) {
         if(!this.estaApoyado && !saltando) {                                       // Si no esta apoyado y no esta saltando, va cayendo (reduce su y) por tick. El numero
@@ -110,7 +135,7 @@ public class Pep {
     }
 
     public boolean cooldown() {
-        if (contTicks > 160) {
+        if (contTicks > 70) {
             return false;
         }
         contTicks += 1;
