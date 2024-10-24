@@ -71,6 +71,10 @@ public class Gnomo {
         return this.x < (x + w) && this.x + this.ancho > x && this.y < y + h && this.y + this.alto > y;
         
     }
+    public boolean detectarTortuga(int x, int y, int w, int h){                                                // Detecta colision.
+    	return this.x < (x + w) && this.x + this.ancho > x && this.y < y + h && this.y + this.alto > y;
+    }
+
 
     public boolean cooldown() {
         if (contTicks > 1) {

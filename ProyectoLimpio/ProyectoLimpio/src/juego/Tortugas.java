@@ -96,7 +96,7 @@ public boolean cooldown() {
             }
 
         if (!this.estaApoyado) {
-            this.y += 3;                                           // :tiger2:
+            this.y += 1;                                           // :tiger2:
             direccionDefinida = false;                            // Caida de tortuga
         }
     }
