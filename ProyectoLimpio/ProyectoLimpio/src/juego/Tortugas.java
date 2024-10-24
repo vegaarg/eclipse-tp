@@ -57,6 +57,15 @@ public boolean detectarColision(int x, int y, int w, int h){                    
     
 }
 
+public boolean detectarPep(int x, int y, int w, int h){                                                // Detecta colision.
+    return this.x < (x + w) + 8 && this.x + this.ancho + 15 > x && this.y < (y + h) && this.y + this.alto > y + 30;
+    
+}
+public boolean detectarBola(int x, int y, int w, int h){                                                // Detecta colision.
+    return this.x < (x + w) + 15 && this.x + this.ancho + 5 > x && this.y < (y + h) && this.y + this.alto > y;
+    
+}
+
 public boolean cooldown() {
     if (contTicks > 20) {
         return false;
@@ -91,5 +100,7 @@ public boolean cooldown() {
             direccionDefinida = false;                            // Caida de tortuga
         }
     }
+    
+    
 
 } 

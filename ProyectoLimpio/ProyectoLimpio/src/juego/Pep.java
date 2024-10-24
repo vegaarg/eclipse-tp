@@ -135,7 +135,7 @@ public class Pep {
     }
 
     public boolean cooldown() {
-        if (contTicks > 70) {
+        if (contTicks > 80) {
             return false;
         }
         contTicks += 1;

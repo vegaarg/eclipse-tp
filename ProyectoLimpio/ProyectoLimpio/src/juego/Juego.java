@@ -2,15 +2,13 @@ package juego;
 
 import java.awt.Color;
 import java.awt.Image;
+
 import java.util.Random;
 
 import entorno.Entorno;
 import entorno.Herramientas;
 import entorno.InterfaceJuego;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import java.io.File;
+
 
 public class Juego extends InterfaceJuego {
     // El objeto Entorno que controla el tiempo y más
@@ -20,7 +18,6 @@ public class Juego extends InterfaceJuego {
 
     private Image Fondo; 
     private Pep pep;
-    private Clip clip;
     private BolaDeFuego bola;
     private Tortugas[] tortugasLista;
     private Gnomo[] gnomosLista;
@@ -28,12 +25,16 @@ public class Juego extends InterfaceJuego {
     private int gnomosSalvados;
     private int gnomosPerdidos;
     private int vidasPerdidas;
-    private int tortugasPerdidas;
+    private int Puntos;
+    private int contTicks;
+    private boolean pausa = false;
+    private boolean inicio = false;
     private boolean randomBooleano;
     private Random random;
     private boolean direccionDefinida = false;
     private boolean direccionMovimiento;
     private final int tamanioLista = 4;
+    private final int tamanioListaTortugas = 4;
 
     // Constantes
 
@@ -51,16 +52,17 @@ public class Juego extends InterfaceJuego {
         this.gnomosSalvados = 0;
         this.gnomosPerdidos = 0;
         this.vidasPerdidas = 3;
-        this.tortugasPerdidas = 0;
+        this.Puntos = 0;
+        
 
+    
         // Inicializar personajes
         pep = new Pep(400, 450, 50, 15, Herramientas.cargarImagen("recursos/idlepepDer.gif"));
         tortugasLista = new Tortugas[tamanioLista];
         gnomosLista = new Gnomo[tamanioLista];
-        bola = new BolaDeFuego(-200, -200, 20, 20, pep.lado,Herramientas.cargarImagen(pep.lado ? "recursos/bolaDeFuego2.gif" : "recursos/bolaDeFuego1.gif"));
 
         for (int i = 0; i < tamanioLista; i++) {
-            tortugasLista[i] = new Tortugas(400, 50, 5, 35, Utilidades.randomBoolean());
+            tortugasLista[i] = new Tortugas(400, 50, 5, 34, Utilidades.randomBoolean());
         }
     
         for (int i = 0; i < tamanioLista; i++) {
@@ -70,6 +72,60 @@ public class Juego extends InterfaceJuego {
 
     @Override
     public void tick() {
+    	///inicio juego
+    	if (!inicio) {
+            if (entorno.estaPresionada('p') || entorno.estaPresionada(entorno.TECLA_ESCAPE)) {
+                inicio = true;
+                pausa = false; // Comienza el juego
+            } else {
+                mostrarPantallaInicio();
+                return;
+            }
+        }
+        if(!pep.cooldown())
+    	if (entorno.estaPresionada('p') || entorno.estaPresionada(entorno.TECLA_ESCAPE)){
+            pausa = !pausa ;
+            contTicks = 00;
+  
+    	}
+    	if(pausa){
+    		mostrarPantallaPausa();
+    		return;
+    	}
+//    	if (entorno.estaPresionada('p') || entorno.estaPresionada(entorno.TECLA_ESCAPE ) && inicio != false) {
+//            inicio = true;    
+//    	}
+//    	if (inicio == false) {
+//    		if (pausa == true) {
+//    			entorno.dibujarImagen(Fondo, 400, 300, 0);
+//        		entorno.cambiarFont("Impact", 50, Color.black);
+//        		entorno.escribirTexto("La aventura", 290, 250);
+//        		entorno.escribirTexto("de Pep", 340, 300);
+//        		entorno.escribirTexto("Press P ", 330, 450);
+//        		return;
+//    		}else {
+//    		pausa = true;
+//    		}
+//    	}else {
+//    		inicio = true;
+//    	}
+    
+//    	//pausa
+//    	if (entorno.estaPresionada('p') || entorno.estaPresionada(entorno.TECLA_ESCAPE ) && pausa != false) {
+//    		 if (pausa = true) {
+//    			 entorno.dibujarImagen(Fondo, 400, 300, 0);
+//    			 entorno.cambiarFont("Impact", 20, Color.white);
+//    		        entorno.escribirTexto("Puntos: " + gnomosSalvados, 8, 25);
+//    		        entorno.escribirTexto("Gnomos Perdidos: " + gnomosPerdidos, 8, 50);
+//    		        entorno.escribirTexto("Vidas Perdidos: " + vidasPerdidas, 8, 75);
+//    		        entorno.escribirTexto("Puntos: " + Puntos, 8, 100);
+//    		        entorno.escribirTexto("ticks: " + pep.contTicks, 8, 150);
+// 	    		entorno.cambiarFont("Impact", 50, Color.red);
+// 	    			entorno.escribirTexto("JUEGO PAUSADO", 250, 300);
+// 	        return;
+//    	}
+//    	}
+            
         // Procesamiento de tiempo
         entorno.dibujarImagen(Fondo, 400, 300, 0); // Fondo del juego
 
@@ -77,12 +133,12 @@ public class Juego extends InterfaceJuego {
         pep.dibujarse(entorno);
         
         // SPAWN TORTUGAS
-        for (int i = 0; i < tamanioLista; i++) {
+        for (int i = 0; i < tamanioListaTortugas; i++) {
             if (tortugasLista[i] != null){
             	tortugasLista[i].dibujarse(entorno);
             	tortugasLista[i].contTicks = 3;
             } else {
-            	tortugasLista[i] = new Tortugas (400, 50, 15, 30, Utilidades.randomBoolean());
+            	tortugasLista[i] = new Tortugas (400, 50, 15, 34, Utilidades.randomBoolean());
             }
         }
      // SPAWN GNOMOS
@@ -103,7 +159,8 @@ public class Juego extends InterfaceJuego {
         entorno.escribirTexto("Puntos: " + gnomosSalvados, 8, 25);
         entorno.escribirTexto("Gnomos Perdidos: " + gnomosPerdidos, 8, 50);
         entorno.escribirTexto("Vidas Perdidos: " + vidasPerdidas, 8, 75);
-        entorno.escribirTexto("Tortugas Muertas: " + tortugasPerdidas, 8, 100);
+        entorno.escribirTexto("Puntos: " + Puntos, 8, 100);
+        entorno.escribirTexto("ticks: " + pep.contTicks, 8, 150);
 
         // Manejo de entrada para el movimiento de Pep
         manejarMovimientoPep();
@@ -146,6 +203,7 @@ public class Juego extends InterfaceJuego {
             tortugaPerdido(i);
         }
     }
+
     /// movimiento de pep
     private void manejarMovimientoPep() {
         if (entorno.estaPresionada('a') || entorno.estaPresionada(entorno.TECLA_IZQUIERDA)) {
@@ -162,12 +220,21 @@ public class Juego extends InterfaceJuego {
         if (pep != null) {
             if (pep.y > 700) {
                 pep = null;
-                pep = new Pep(400, 300, 50, 30, Herramientas.cargarImagen("recursos/idlepepDer.gif"));
+                pep = new Pep(400, 150, 50, 30, Herramientas.cargarImagen("recursos/idlepepDer.gif"));
                 vidasPerdidas--;
+                if(vidasPerdidas<=0) {
+        	    	pausa=true;
+        	    	entorno.cambiarFont("Impact", 50, Color.black);
+        			entorno.escribirTexto("La aventura", 290, 250);
+        			entorno.escribirTexto("de Pep", 340, 300);
+        			entorno.escribirTexto("acabo.", 340, 300);
+        			return;
+            	}
             }
+
         }
     }
-
+    
     /// Funcion de bola de fuego
     private void manejarBolaDeFuego() {
         if (!pep.cooldown()) {
@@ -220,13 +287,14 @@ public class Juego extends InterfaceJuego {
         if (gnomosLista[num] == null){
             return;
         }
-        if (gnomosLista[num].detectarColision(pep.x, pep.y, pep.ancho, pep.alto)) {            // Pep recoge al gnomo y le suma un punto
+        if (gnomosLista[num].detectarPep(pep.x, pep.y, pep.ancho, pep.alto)) {            // Pep recoge al gnomo y le suma un punto
             gnomosLista[num] = null;
             gnomosSalvados++;
+            Puntos += 100;
         }
     }
 
-    public void gnomoPerdido(int num) {
+	public void gnomoPerdido(int num) {
         if (gnomosLista[num] == null){
             return;
         }
@@ -238,32 +306,41 @@ public class Juego extends InterfaceJuego {
     
     // mover las tortugas 
     private void manejarColisionesTortuga(Tortugas tortuga){
+//        bola = new BolaDeFuego(pep.x, pep.y, 40, 0, pep.lado,
+//                Herramientas.cargarImagen(pep.lado ? "recursos/bolaDeFuego2.gif" : "recursos/bolaDeFuego1.gif"));
+//        pep.contTicks = 0;
+        
     	tortuga.tortugaEstaApoyado(islaBase);
    	}
         public void tortugaColision(int num) {
     	       if (tortugasLista[num] == null){
     	           return;
     	      }
-    	        if (tortugasLista[num].detectarColision(bola.x, bola.y, bola.ancho, bola.alto)) {            // bola mata tortuga y le suma un punto
-    	            tortugasLista[num] = null;
-    	            tortugasPerdidas++;
-    	        }
-    	    }     
+    	       if (bola != null) {
+    	    	   if (tortugasLista[num].detectarBola(bola.x, bola.y, bola.ancho, bola.alto)) {            // bola mata tortuga y le suma un punto
+    	    		   tortugasLista[num] = null;
+    	    		   bola = null;
+    	    		   pep.contTicks = 80;
+    	    		   Puntos += 50;
+    	    	   }
+    	      }
+        }
     	 public void tortugaPerdido(int num) {
     		 if (tortugasLista[num] == null){
     			 return;
     	 }
     		if (tortugasLista[num].y > 700) {
     			tortugasLista[num] = null;
-    		}
-    		if (tortugasLista[num].detectarColision(pep.x, pep.y, pep.ancho, pep.alto)) {            // bola mata tortuga y le suma un punto
+    		} else if (tortugasLista[num].detectarPep(pep.x, pep.y, pep.ancho, pep.alto)) {            // bola mata tortuga y le suma un punto
 	            pep = null;
 	            pep = new Pep(400, 300, 50, 30, Herramientas.cargarImagen("recursos/pepDer.png"));
 	            vidasPerdidas--;
+	            
+	            
 	        }
     }
 
-    public static void main(String[] args) {
+	public static void main(String[] args) {
         new Juego();
     }
 
@@ -273,6 +350,27 @@ public class Juego extends InterfaceJuego {
         dibujarIslas(isla.izq);
         dibujarIslas(isla.der);
     }
+    private void mostrarPantallaInicio() {
+		entorno.dibujarImagen(Fondo, 400, 300, 0);
+		entorno.cambiarFont("Impact", 50, Color.black);
+		entorno.escribirTexto("La aventura", 290, 250);
+		entorno.escribirTexto("de Pep", 340, 300);
+		entorno.escribirTexto("Press P ", 330, 450);
+    	return;
+    }
+    public void mostrarPantallaPausa(){
+    	entorno.dibujarImagen(Fondo, 400, 300, 0);
+		entorno.cambiarFont("Impact", 20, Color.white);
+	    entorno.escribirTexto("Puntos: " + gnomosSalvados, 8, 25);
+	    entorno.escribirTexto("Gnomos Perdidos: " + gnomosPerdidos, 8, 50);
+	    entorno.escribirTexto("Vidas Perdidos: " + vidasPerdidas, 8, 75);
+	    entorno.escribirTexto("Puntos: " + Puntos, 8, 100);
+	    entorno.escribirTexto("ticks: " + pep.contTicks, 8, 150);
+		entorno.cambiarFont("Impact", 50, Color.red);
+		entorno.escribirTexto("JUEGO PAUSADO", 250, 300);
+    return;
+    }
+    
 
     public boolean estaApoyado(Islas isla) {
         if (isla == null) return false;
@@ -287,4 +385,11 @@ public class Juego extends InterfaceJuego {
 		return randomBooleano;
 
 	}
+	public boolean cooldown() {
+        if (contTicks > 80) {
+            return false;
+        }
+        contTicks += 1;
+        return true;
+    }
 }

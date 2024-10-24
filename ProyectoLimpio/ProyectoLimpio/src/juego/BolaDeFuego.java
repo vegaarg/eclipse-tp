@@ -10,6 +10,8 @@ public class BolaDeFuego {
     int y;
     int ancho;
     int alto;
+    int contTicks = 0;
+    int velocidad = 9;
     boolean lado;
     Image img;
     Color myColor = Color.yellow;
@@ -28,12 +30,13 @@ public class BolaDeFuego {
 
     public void movimientoIzquierda() {
         if (this.x > -50) {
-            this.x -= 5;
+            this.x -= velocidad;
         }
     }
     public void movimientoDerecha() {
         if (this.x < 850) {
-            this.x += 5;
+            this.x += velocidad;
         }
     }
+    
 }
