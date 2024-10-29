@@ -5,7 +5,6 @@ import java.awt.Image;
 
 import entorno.Entorno;
 import entorno.Herramientas;
-import juego.Utilidades;
 
 public class Gnomo {
     int x;
@@ -32,6 +31,7 @@ public class Gnomo {
         this.estaApoyado = false;
         direccionDefinida = false;
     }
+
 
 //    public void dibujarHitbox(Entorno entorno){                                  // Dibuja un rectangulo azul. Esto vamos a usarlo
 //        entorno.dibujarRectangulo(x, y, ancho, alto, 0, myColor);         // despues para ver la hitbox de la plataforma.

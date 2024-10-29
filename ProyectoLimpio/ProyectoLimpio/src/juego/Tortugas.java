@@ -2,7 +2,6 @@ package juego;
 
 import java.awt.Color;
 import java.awt.Image;
-import java.awt.Rectangle;
 import entorno.Entorno;
 import entorno.Herramientas;
 
@@ -12,6 +11,8 @@ public class Tortugas {
     int ancho;
     int alto;
     Image img;
+    Image izq;
+    Image der;
     boolean lado;
     int velocidad = 1;
     Color myColor = Color.red;
@@ -19,6 +20,7 @@ public class Tortugas {
     boolean direccionDefinida;
 	public boolean detectarColision;
 	public int contTicks;
+	public boolean enCaida;
 
     public Tortugas (int x, int y, int ancho, int alto, boolean lado){
         this.x = x;
@@ -26,9 +28,12 @@ public class Tortugas {
         this.ancho = ancho;
         this.alto = alto;
         this.img =  Herramientas.cargarImagen("recursos/tortuga.png");
+        this.der =  Herramientas.cargarImagen("recursos/tortugaIzq.gif");
+        this.izq =  Herramientas.cargarImagen("recursos/tortugaDer.gif");
         lado = false;
         this.estaApoyado = false;
         this.detectarColision= false;
+        this.enCaida = false;
     }
 
     public void dibujarHitbox(Entorno entorno){                                  //Dibuja un rectangulo azul. Esto vamos a usarlo
@@ -41,14 +46,14 @@ public class Tortugas {
 public void movimientoIzquierda() {
     if (this.x > 0) {
         this.x -= velocidad;
-        this.img = Herramientas.cargarImagen("recursos/tortuga.png");
+        this.img = Herramientas.cargarImagen("recursos/tortugaDer.gif");
     }
 }
 
 public void movimientoDerecha() {
     if (this.x < 800) {
         this.x += velocidad;
-        this.img = Herramientas.cargarImagen("recursos/tortuga2.png");
+        this.img = Herramientas.cargarImagen("recursos/tortugaIzq.gif");
     }
 }
 
@@ -93,14 +98,56 @@ public boolean cooldown() {
                 } else {
                     this.movimientoIzquierda();
                 }
-            }
+            }        
 
-        if (!this.estaApoyado) {
-            this.y += 1;                                           // :tiger2:
-            direccionDefinida = false;                            // Caida de tortuga
+    }
+    // Caida de tortuga
+    public void gravedadTortuga(Islas isla) {
+        // Verifica si la tortuga está apoyada en la isla
+        this.estaApoyado = tortugaEstaApoyado(isla);
+        if (!this.estaApoyado && enCaida== true) {
+            this.y += 1; // Aplica gravedad para que caiga
+            
+
         }
     }
-    
-    
 
-} 
+    public void direccionTortuga(Islas isla) {
+        // Cambia la dirección de la tortuga cuando esté apoyada
+        if (!estaApoyado) {
+            // Alterna la dirección si está apoyada
+            lado = !lado;
+        }
+        // Movimiento en la dirección actual
+	        if (lado) {
+	        	this.x -=1;
+	            movimientoIzquierda();
+	        } else {
+	        	this.x +=1;
+	            movimientoDerecha();
+	        }
+	        return;
+    }
+
+    public void actualizar(Islas isla) {
+        if (enCaida) {
+            gravedadTortuga(isla);
+            if (estaApoyado) {
+                enCaida = false; // Detiene la caída al tocar el suelo
+            }
+        } else {
+            direccionTortuga(isla); // Mueve lateralmente si no está cayendo
+        }
+    }
+
+//    public void tortugaIsla(Islas isla) {
+//    	if(enCaida) {
+//    		gravedadTortuga(isla);
+//    		if(!estaApoyado) {
+//    			
+//    			direccionTortuga(isla);
+//    		
+//    		}
+//    	}
+//    }
+}

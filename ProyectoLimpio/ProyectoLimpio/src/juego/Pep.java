@@ -28,7 +28,7 @@ public class Pep {
     BolaDeFuego bola;
     int longSalto;
     int contTicks = 0;
-    int velocidad = 2;
+    int velocidad = 3;
     boolean lado;
 
     public Pep(int x, int y, int alto, int ancho, Image img){
@@ -91,13 +91,20 @@ public class Pep {
         if(!this.estaApoyado && !saltando) {                                       // Si no esta apoyado y no esta saltando, va cayendo (reduce su y) por tick. El numero
             this.y += 4;	// se puede aumentar o disminuir dependiendo de la velocidad de caida
         }
-        if(saltando) {                                                              // Si esta saltando (se activa la tecla) le resta el y. Esta es la velocidad a la que va
-            this.y -= 6;                                                            // a saltar y va por ticks. longSalto es el limite a lo que llega el salto, que tambien va
-            this.longSalto++;                                                       // por ticks
+        if(saltando) { 													// Si esta saltando (se activa la tecla) le resta el y. Esta es la velocidad a la que va
+            if(lado == false){ 										// Si esta saltando (se activa la tecla) le resta el y. Esta es la velocidad a la que va
+            	this.y -= 6;
+            	this.x += 1;
+            	 this.longSalto++; // a saltar y va por ticks. longSalto es el limite a lo que llega el salto, que tambien va
+            }else{                                                     // por ticks
+            	this.y -= 6; 				// a saltar y va por ticks. longSalto es el limite a lo que llega el salto, que tambien va
+            	this.x -=1;
+            	this.longSalto++;                                                       // por ticks
         }
         if(this.longSalto > 25){                                                    // Chequea si la longitud de salto pasa de un numero. Este numero es el que tan alto puede
             saltando=false;                                                         // puede saltar. Si es mayor, define al booleano saltando como falso y resetea la longitud.
             this.longSalto=0;
+        }
         }
     }
 
@@ -141,6 +148,11 @@ public class Pep {
         contTicks += 1;
         return true;
     }
-
+    public int limiteSuperior() {
+    	return this.y - this.alto / 2;
+    	}
+    public int limiteInferior() {
+    	return this.y + this.alto / 2;
+    	}
 
 }
