@@ -92,24 +92,30 @@ public class Pep {
             this.y += 4;	// se puede aumentar o disminuir dependiendo de la velocidad de caida
         }
         if(saltando) { 													// Si esta saltando (se activa la tecla) le resta el y. Esta es la velocidad a la que va
-            if(lado == false){ 										// Si esta saltando (se activa la tecla) le resta el y. Esta es la velocidad a la que va
+            if(!lado){ 										// Si esta saltando (se activa la tecla) le resta el y. Esta es la velocidad a la que va
             	this.y -= 6;
-            	this.x += 1;
-            	 this.longSalto++; // a saltar y va por ticks. longSalto es el limite a lo que llega el salto, que tambien va
+                this.longSalto++; // a saltar y va por ticks. longSalto es el limite a lo que llega el salto, que tambien va
             }else{                                                     // por ticks
-            	this.y -= 6; 				// a saltar y va por ticks. longSalto es el limite a lo que llega el salto, que tambien va
-            	this.x -=1;
+            	this.y -= 6;
+                // a saltar y va por ticks. longSalto es el limite a lo que llega el salto, que tambien va
             	this.longSalto++;                                                       // por ticks
         }
-        if(this.longSalto > 25){                                                    // Chequea si la longitud de salto pasa de un numero. Este numero es el que tan alto puede
-            saltando=false;                                                         // puede saltar. Si es mayor, define al booleano saltando como falso y resetea la longitud.
+        if (this.longSalto > 25){                                                    // Chequea si la longitud de salto pasa de un numero. Este numero es el que tan alto puede
+            saltando=false;
+
+            if(!lado){
+                this.x += 40;                                                                               // puede saltar. Si es mayor, define al booleano saltando como falso y resetea la longitud.
+            } else {
+                this.x -= 40;
+            }
+
             this.longSalto=0;
-        }
+            }
         }
     }
 
     public boolean detectarColision(int x, int y, int w, int h){                                                            // Detecta colision.
-        return this.x < (x + w) + 20 && this.x + this.ancho > x - 40 && this.y + 5 < y + h && this.y + this.alto > y + 12;
+        return this.x < (x + w) && this.x + this.ancho > x && this.y < y + h && this.y + this.alto > y + 13;
     }
 
     public String ladoColision(int x, int y, int w, int h){

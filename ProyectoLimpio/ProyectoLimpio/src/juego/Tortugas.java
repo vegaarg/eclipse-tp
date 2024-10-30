@@ -58,7 +58,7 @@ public void movimientoDerecha() {
 }
 
 public boolean detectarColision(int x, int y, int w, int h){                                                // Detecta colision.
-    return this.x < (x + w) + 15 && this.x + this.ancho > x - 50 && this.y < y + h && this.y + this.alto > y + 3;
+    return this.x < (x + w) - 20 && this.x + this.ancho > x - 10 && this.y < y + h && this.y + this.alto > y + 3;
     
 }
 

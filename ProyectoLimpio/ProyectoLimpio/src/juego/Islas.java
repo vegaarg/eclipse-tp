@@ -40,7 +40,7 @@ public class Islas {
     }
 
     public void dibujarse(Entorno entorno){
-        entorno.dibujarImagen(this.img, this.x, this.y, 0, 0.15);    //Dibuja al personaje en pantalla
+        entorno.dibujarImagen(this.img, this.x, this.y, 0, 1);    //Dibuja a las islas en pantalla
     }
 
     @Override

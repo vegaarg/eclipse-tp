@@ -63,7 +63,7 @@ public class Gnomo {
 
 
     public boolean detectarColision(int x, int y, int w, int h){                                                // Detecta colision.
-        return this.x < (x + w) + 15 && this.x + this.ancho > x - 50 && this.y < y + h && this.y + this.alto > y + 3;
+        return this.x < (x + w) - 10 && this.x + this.ancho > x - 30 && this.y < y + h && this.y + this.alto > y + 3;
         
     }
     

@@ -23,7 +23,7 @@ public class Juego extends InterfaceJuego {
     private BolaDeFuego bola;
     private Tortugas[] tortugasLista;
     private Gnomo[] gnomosLista;
-    private Islas islaBase = new Islas(400, 80, 50, 5);
+    private Islas islaBase = new Islas(380, 80, 90, 20);
     private int gnomosSalvados;
     private int gnomosPerdidos;
     private int vidasPerdidas;
@@ -62,7 +62,7 @@ public class Juego extends InterfaceJuego {
     
         // Inicializar personajes
         Casa = Herramientas.cargarImagen("recursos/casa.png");
-        pep = new Pep(400, 450, 50, 15, Herramientas.cargarImagen("recursos/idlepepDer.gif"));
+        pep = new Pep(400, 450, 53, 48, Herramientas.cargarImagen("recursos/idlepepDer.gif"));
         tortugasLista = new Tortugas[tamanioLista];
         gnomosLista = new Gnomo[tamanioLista];
         if(temporizador == 100 || temporizador == 200 || temporizador == 300|| temporizador == 400 || temporizador == 500 ||temporizador == 150 || temporizador == 250 ) { ///el temporizador se explica abajo
@@ -74,7 +74,7 @@ public class Juego extends InterfaceJuego {
 	            }
 	        }
 	        for (int i = 0; i < tamanioLista; i++) {
-	            gnomosLista[i] = new Gnomo(400, 50, 10, 30, Utilidades.randomBoolean());
+	            gnomosLista[i] = new Gnomo(400, 50, 15, 30, Utilidades.randomBoolean());
 	        }
         }
         
@@ -218,7 +218,7 @@ public class Juego extends InterfaceJuego {
         if (pep != null) {
             if (pep.y > 700) {
                 pep = null;
-                pep = new Pep(400, 450, 50, 30, Herramientas.cargarImagen("recursos/idlepepDer.gif"));
+                pep = new Pep(400, 450, 53, 48, Herramientas.cargarImagen("recursos/idlepepDer.gif"));
                 vidasPerdidas--;
                 if(vidasPerdidas <=0) {                                           //si pierde las vida lleva a un final
         	    	final1=true;
@@ -248,28 +248,7 @@ public class Juego extends InterfaceJuego {
 
     ///colisiones al estar en plataformas
     private void manejarColisiones() {
-
         pep.estaApoyado = estaApoyado(islaBase);
-        String lado = pep.ladoColision(islaBase.x, islaBase.y, islaBase.ancho, islaBase.alto);
-
-
-        if (!lado.isEmpty()){
-            switch (lado){
-                case "izquierda":
-                    pep.x = islaBase.x - islaBase.ancho/2 - pep.ancho;
-                    break;
-                case "derecha":
-                    pep.x = islaBase.ancho+ islaBase.x;
-                    break;
-                case "arriba":
-                    break;
-                case "abajo":
-                    pep.y = islaBase.y+pep.alto;
-                    pep.saltando = false;
-                    System.out.println("colision");
-            }
-        }
-
     }
     
     private void manejarColisionesGnomo(Gnomo gnomo){
@@ -280,14 +259,14 @@ public class Juego extends InterfaceJuego {
         if (gnomosLista[num] == null){
             return;
         }
-        if (pep.y >=300) {
+
+        if (pep.y >=200) {
 	        if (gnomosLista[num].detectarPep(pep.x, pep.y, pep.ancho, pep.alto)) {            // Pep recoge al gnomo y le suma un punto
 	            gnomosLista[num] = null;
 	            gnomosSalvados++;
 	            Puntos += 100;
 	            if(gnomosSalvados == 20) {
 	            	final1=true;													                                          //si llega a 20 gana
-	    			return;
 	            }
 	        }
         }
@@ -331,7 +310,7 @@ public class Juego extends InterfaceJuego {
     			tortugasLista[num] = null;
     		} else if (tortugasLista[num].detectarPep(pep.x, pep.y, pep.ancho, pep.alto)) {            // bola mata tortuga y le suma un punto
 	            pep = null;
-	            pep = new Pep(400, 450, 50, 30, Herramientas.cargarImagen("recursos/pepDer.png"));
+	            pep = new Pep(400, 450, 53, 48, Herramientas.cargarImagen("recursos/pepDer.png"));
 	            vidasPerdidas--;
 	            if(vidasPerdidas<=0) {
 	            	final1 = true;                                          //si lo mata una tortuga lo lleva a un final
@@ -411,7 +390,33 @@ public class Juego extends InterfaceJuego {
     }
 	
     public boolean estaApoyado(Islas isla) {
-        if (isla == null) return false;
+        if (isla == null) {
+            return false;
+        }
+
+        String lado = pep.ladoColision(isla.x, isla.y, isla.ancho, isla.alto);
+        if (!lado.isEmpty()){
+            switch (lado){
+                case "izquierda":
+                    pep.x -= pep.velocidad;
+                    pep.estaApoyado = false;
+                    pep.saltando = false;;
+                    break;
+                case "derecha":
+                    pep.x += pep.velocidad;
+                    pep.estaApoyado = false;
+                    pep.saltando = false;
+                    break;
+                case "arriba":
+                    break;
+                case "abajo":
+                    pep.y = isla.y + pep.alto;
+                    pep.saltando = false;
+                    pep.longSalto = 0;
+
+            }
+        }
+
         return pep.detectarColision(isla.x, isla.y, isla.ancho, isla.alto) ||
                estaApoyado(isla.izq) || estaApoyado(isla.der);
     }
