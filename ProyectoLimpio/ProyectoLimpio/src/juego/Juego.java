@@ -103,7 +103,7 @@ public class Juego extends InterfaceJuego {
     	colisionGnomosYtortugas();
     	mejorPuntuacion();
 
-    	if (entorno.estaPresionada('p') || entorno.estaPresionada(entorno.TECLA_ESCAPE)){                    //pausa
+    	if (entorno.sePresiono('p') || entorno.sePresiono(entorno.TECLA_ESCAPE)){                    //pausa
             pausa = !pausa ;
 
     	}
@@ -152,7 +152,7 @@ public class Juego extends InterfaceJuego {
         entorno.cambiarFont("Impact", 20, Color.white);
         entorno.escribirTexto("Gnomos Salvados: " + gnomosSalvados, 8, 25);
         entorno.escribirTexto("Gnomos Perdidos: " + gnomosPerdidos, 8, 50);
-        entorno.escribirTexto("Vidas Perdidos: " + vidasPerdidas, 8, 75);
+        entorno.escribirTexto("Vidas Perdidas: " + vidasPerdidas, 8, 75);
         entorno.escribirTexto("Puntos: " + Puntos, 8, 100);
         entorno.escribirTexto("ticks: " + pep.contTicks, 8, 125);
         entorno.escribirTexto("temporizador: " + temporizador, 8, 150);
@@ -340,7 +340,7 @@ public class Juego extends InterfaceJuego {
 		entorno.cambiarFont("Impact", 20, Color.white);
 	    entorno.escribirTexto("Puntos: " + gnomosSalvados, 8, 25);
 	    entorno.escribirTexto("Gnomos Perdidos: " + gnomosPerdidos, 8, 50);
-	    entorno.escribirTexto("Vidas Perdidos: " + vidasPerdidas, 8, 75);
+	    entorno.escribirTexto("Vidas Perdidas: " + vidasPerdidas, 8, 75);
 	    entorno.escribirTexto("Puntos: " + Puntos, 8, 100);
 	    entorno.escribirTexto("ticks: " + pep.contTicks, 8, 150);
 		entorno.cambiarFont("Impact", 50, Color.red);
@@ -368,8 +368,8 @@ public class Juego extends InterfaceJuego {
 	    	    
 	            
 	    	}
-	    }else {
-	    	entorno.dibujarImagen(Gana, 400, 300, 0);	                                          //si tiene mas, pues ya sabes
+	    }else {                                                                    //si tiene mas de 20, ganaste
+	    	entorno.dibujarImagen(Gana, 400, 300, 0);	                                         
 	    	entorno.cambiarFont("Impact", 20, Color.green);
 	    	entorno.escribirTexto(" " + PuntosAlto, 300, 400);
 	    	entorno.escribirTexto(" " + Puntos, 200, 460);

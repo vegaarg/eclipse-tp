@@ -104,7 +104,7 @@ public class Pep {
             saltando=false;
 
             if(!lado){
-                this.x += 40;                                                                               // puede saltar. Si es mayor, define al booleano saltando como falso y resetea la longitud.
+                this.x += 40;                                                                               // puede saltar. Si es mayor, define al booleano saltando como falso y reeseta la longitud.
             } else {
                 this.x -= 40;
             }
