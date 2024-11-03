@@ -260,7 +260,7 @@ public class Juego extends InterfaceJuego {
             return;
         }
 
-        if (pep.y >=200) {
+        if (pep.y >=340) {
 	        if (gnomosLista[num].detectarPep(pep.x, pep.y, pep.ancho, pep.alto)) {            // Pep recoge al gnomo y le suma un punto
 	            gnomosLista[num] = null;
 	            gnomosSalvados++;
