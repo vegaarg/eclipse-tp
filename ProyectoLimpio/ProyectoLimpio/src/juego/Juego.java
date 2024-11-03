@@ -24,6 +24,7 @@ public class Juego extends InterfaceJuego {
     private Tortugas[] tortugasLista;
     private Gnomo[] gnomosLista;
     private Islas islaBase = new Islas(380, 80, 90, 20);
+    private int enemigosEliminados=0;
     private int gnomosSalvados;
     private int gnomosPerdidos;
     private int vidasPerdidas;
@@ -154,9 +155,10 @@ public class Juego extends InterfaceJuego {
         entorno.escribirTexto("Gnomos Perdidos: " + gnomosPerdidos, 8, 50);
         entorno.escribirTexto("Vidas Perdidas: " + vidasPerdidas, 8, 75);
         entorno.escribirTexto("Puntos: " + Puntos, 8, 100);
-        entorno.escribirTexto("ticks: " + pep.contTicks, 8, 125);
-        entorno.escribirTexto("temporizador: " + temporizador, 8, 150);
-        entorno.escribirTexto("segundos: " + segundos, 8, 175);
+        entorno.escribirTexto("Enemigos eliminados: " + enemigosEliminados, 8, 125);
+        entorno.escribirTexto("Tiempo Transcurrido: " + segundos, 8, 150);
+        //entorno.escribirTexto("temporizador: " + temporizador, 8, 175);
+       
 
         // Manejo de entrada para el movimiento de Pep
         manejarMovimientoPep();
@@ -299,6 +301,7 @@ public class Juego extends InterfaceJuego {
     	    		   bola = null;
     	    		   contTicks = 80;
     	    		   Puntos += 50;
+    	    		   enemigosEliminados++;
     	    	   }
     	      }
         }
@@ -347,7 +350,7 @@ public class Juego extends InterfaceJuego {
 		entorno.escribirTexto("JUEGO PAUSADO", 250, 300);
     return;
     }
-    public void mostrarPantallaFinal(){                                          //pantalla de  victoria y derrota
+    public void mostrarPantallaFinal(){                                          //pantalla de victoria y derrota
     	Gana = Herramientas.cargarImagen("recursos/pepGana.png");
     	Pierde = Herramientas.cargarImagen("recursos/pepPierde.png");
     	entorno.cambiarFont("Impact", 20, Color.green);
