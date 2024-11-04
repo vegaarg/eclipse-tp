@@ -20,5 +20,4 @@ public class Colision {
     public void dibujarHitbox(Entorno entorno) {
         entorno.dibujarRectangulo(x, y, alto, ancho, 0, myColor);
     }
-
 }

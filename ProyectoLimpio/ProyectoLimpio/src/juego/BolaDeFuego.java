@@ -29,7 +29,7 @@ public class BolaDeFuego {
     }
 
     public void movimientoIzquierda() {
-        if (this.x > -50) {
+    	if (this.x > -50) {
             this.x -= velocidad;
         }
     }
