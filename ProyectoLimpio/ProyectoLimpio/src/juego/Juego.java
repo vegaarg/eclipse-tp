@@ -28,14 +28,14 @@ public class Juego extends InterfaceJuego {
     private int gnomosSalvados;
     private int gnomosPerdidos;
     private int vidasPerdidas;
-    private int Puntos;
+    private int Puntos = 0;
     private int PuntosAlto;
     private int contTicks;
     private int tiempo;
     private int segundos;
     private int temporizador=1000;
     private boolean pausa = false;
-    private boolean final1 = false;
+    private boolean finales = false;
     private boolean inicio = false;
     private boolean randomBooleano;
     private final int tamanioLista = 4;
@@ -48,6 +48,7 @@ public class Juego extends InterfaceJuego {
         this.entorno = new Entorno(this, "Al rescate de los gnomos", 800, 600);
         inicializarJuego();
         this.entorno.iniciar();
+        mejorPuntuacion();
     }
 
     private void inicializarJuego() {
@@ -58,7 +59,8 @@ public class Juego extends InterfaceJuego {
         this.gnomosPerdidos = 0;
         this.vidasPerdidas = 3;
         this.Puntos = 0;
-        this.PuntosAlto =0;
+        this.enemigosEliminados =0;
+        
 
     
         // Inicializar personajes
@@ -102,7 +104,7 @@ public class Juego extends InterfaceJuego {
     	contador();                             	//	todo esto abajo, pero es lo que pensas
     	tiempo();
     	colisionGnomosYtortugas();
-    	mejorPuntuacion();
+    	
 
     	if (entorno.sePresiono('p') || entorno.sePresiono(entorno.TECLA_ESCAPE)){                    //pausa
             pausa = !pausa ;
@@ -112,10 +114,13 @@ public class Juego extends InterfaceJuego {
     		mostrarPantallaPausa();
     		return;
     	}
-    	if(final1) {		                                                                     
+    	if(finales) {		                                                                     
     		mostrarPantallaFinal();
     		return;
     	}
+		if(Puntos > PuntosAlto) {
+			PuntosAlto = Puntos;
+		}
 
         // Procesamiento de tiempo
         entorno.dibujarImagen(Fondo, 400, 300, 0); // Fondo del juego
@@ -154,10 +159,11 @@ public class Juego extends InterfaceJuego {
         entorno.escribirTexto("Gnomos Salvados: " + gnomosSalvados, 8, 25);
         entorno.escribirTexto("Gnomos Perdidos: " + gnomosPerdidos, 8, 50);
         entorno.escribirTexto("Vidas Perdidas: " + vidasPerdidas, 8, 75);
-        entorno.escribirTexto("Puntos: " + Puntos, 8, 100);
-        entorno.escribirTexto("Enemigos eliminados: " + enemigosEliminados, 8, 125);
-        entorno.escribirTexto("Tiempo Transcurrido: " + segundos, 8, 150);
-        //entorno.escribirTexto("temporizador: " + temporizador, 8, 175);
+        entorno.escribirTexto("Enemigos eliminados: " + enemigosEliminados, 8, 100);
+        entorno.escribirTexto("Tiempo Transcurrido: " + segundos, 8, 125);
+        entorno.escribirTexto("Puntos: " + Puntos, 8, 150);
+        entorno.escribirTexto("Mejor Puntajes: " + PuntosAlto, 8, 175);
+      
        
 
         // Manejo de entrada para el movimiento de Pep
@@ -223,7 +229,7 @@ public class Juego extends InterfaceJuego {
                 pep = new Pep(400, 450, 53, 48, Herramientas.cargarImagen("recursos/idlepepDer.gif"));
                 vidasPerdidas--;
                 if(vidasPerdidas <=0) {                                           //si pierde las vida lleva a un final
-        	    	final1=true;
+        	    	finales=true;
         			return;
             	}
             }
@@ -268,7 +274,7 @@ public class Juego extends InterfaceJuego {
 	            gnomosSalvados++;
 	            Puntos += 100;
 	            if(gnomosSalvados == 20) {
-	            	final1=true;													                                          //si llega a 20 gana
+	            	finales=true;													                                          //si llega a 20 gana
 	            }
 	        }
         }
@@ -281,7 +287,7 @@ public class Juego extends InterfaceJuego {
             gnomosLista[num] = null;
             gnomosPerdidos++;
         if(gnomosPerdidos >= 20) {
-            	final1 = true;                                                                           //si pierde 20 pierde
+            	finales = true;                                                                           //si pierde 20 pierde
     			return;
             }	
          }	
@@ -300,7 +306,7 @@ public class Juego extends InterfaceJuego {
     	    		   tortugasLista[num] = null;
     	    		   bola = null;
     	    		   contTicks = 80;
-    	    		   Puntos += 50;
+    	    		   Puntos += 150;
     	    		   enemigosEliminados++;
     	    	   }
     	      }
@@ -316,7 +322,7 @@ public class Juego extends InterfaceJuego {
 	            pep = new Pep(400, 450, 53, 48, Herramientas.cargarImagen("recursos/pepDer.png"));
 	            vidasPerdidas--;
 	            if(vidasPerdidas<=0) {
-	            	final1 = true;                                          //si lo mata una tortuga lo lleva a un final
+	            	finales = true;                                          //si lo mata una tortuga lo lleva a un final
         			return;
         			}
             	}
@@ -341,11 +347,13 @@ public class Juego extends InterfaceJuego {
     public void mostrarPantallaPausa(){                                                 //pausa
     	entorno.dibujarImagen(Fondo, 400, 300, 0);
 		entorno.cambiarFont("Impact", 20, Color.white);
-	    entorno.escribirTexto("Puntos: " + gnomosSalvados, 8, 25);
-	    entorno.escribirTexto("Gnomos Perdidos: " + gnomosPerdidos, 8, 50);
-	    entorno.escribirTexto("Vidas Perdidas: " + vidasPerdidas, 8, 75);
-	    entorno.escribirTexto("Puntos: " + Puntos, 8, 100);
-	    entorno.escribirTexto("ticks: " + pep.contTicks, 8, 150);
+		entorno.escribirTexto("Gnomos Salvados: " + gnomosSalvados, 8, 25);
+        entorno.escribirTexto("Gnomos Perdidos: " + gnomosPerdidos, 8, 50);
+        entorno.escribirTexto("Vidas Perdidas: " + vidasPerdidas, 8, 75);
+        entorno.escribirTexto("Enemigos eliminados: " + enemigosEliminados, 8, 100);
+        entorno.escribirTexto("Tiempo Transcurrido: " + segundos, 8, 125);
+        entorno.escribirTexto("Puntos: " + Puntos, 8, 150);
+        entorno.escribirTexto("Mejor Puntajes: " + PuntosAlto, 8, 175);
 		entorno.cambiarFont("Impact", 50, Color.red);
 		entorno.escribirTexto("JUEGO PAUSADO", 250, 300);
     return;
@@ -366,8 +374,9 @@ public class Juego extends InterfaceJuego {
 	    	    inicializarJuego();
 	    	    pausa = false;
 	    	    inicio = true;
-	    	    final1 = false;
+	    	    finales = false;
 	    	    tiempo = 0;
+	    	    segundos = 0;
 	    	    
 	            
 	    	}
@@ -383,8 +392,9 @@ public class Juego extends InterfaceJuego {
 	    	    inicializarJuego();
 	    	    pausa = false;
 	    	    inicio = true;
-	    	    final1 = false;
+	    	    finales = false;
 	    	    tiempo = 0;
+	    	    segundos = 0;
 	    	    
 		    
 	    }
@@ -447,7 +457,7 @@ public class Juego extends InterfaceJuego {
 		
 	}
 	public void tiempo() { // tiempo.... no para al terminar
-		if (tiempo <= 90 && final1 == false && pausa == false) {
+		if (tiempo <= 90 && finales == false && pausa == false) {
 		tiempo++;
 			if (tiempo == 90) {
 			segundos++;
