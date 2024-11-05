@@ -2,8 +2,7 @@ package juego;
 
 import java.awt.Color;
 import java.awt.Image;
-import java.awt.Rectangle;
-import java.util.Vector;
+
 
 import entorno.Entorno;
 import entorno.Herramientas;
@@ -46,6 +45,7 @@ public class Pep {
         this.longSalto=0;
         lado = false;               // Lado en false equivale a la derecha, en true equivale a la izquierda
     }
+    
     public void dibujarHitbox(Entorno entorno){                                  // Dibuja un rectangulo azul. Esto vamos a usarlo
         entorno.dibujarRectangulo(x, y, ancho, alto, 0, myColor);         // despues para ver la hitbox de la plataforma.
     }

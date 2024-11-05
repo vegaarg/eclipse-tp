@@ -18,7 +18,7 @@ public class Gnomo {
     boolean lado;
     Image imgDer;
     Image imgIzq;
-    Color myColor = Color.ORANGE;
+    Color myColor = Color.GREEN;
 
     public Gnomo(int x, int y, int ancho, int alto, boolean lado){
         this.x = x;
@@ -33,10 +33,6 @@ public class Gnomo {
     }
 
 
-//    public void dibujarHitbox(Entorno entorno){                                  // Dibuja un rectangulo azul. Esto vamos a usarlo
-//        entorno.dibujarRectangulo(x, y, ancho, alto, 0, myColor);         // despues para ver la hitbox de la plataforma.
-//    }
-
     public void dibujarse(Entorno entorno){
         if (lado) {
             entorno.dibujarImagen(this.imgDer, this.x, this.y, 0, 1);     //Dibuja al personaje en pantalla, Si lado es falso dibuja el izquierdo, si es true, muestra el derecho.
@@ -48,16 +44,12 @@ public class Gnomo {
     public void movimientoIzquierda() {
         if (this.x > 0) {
             this.x -= velocidad;
-//            this.img = Herramientas.cargarImagen("recursos/gnomo2.png");
-//            lado = true;
         }
     }
 
     public void movimientoDerecha() {
         if (this.x < 800) {
             this.x += velocidad;
-//            this.img = Herramientas.cargarImagen("recursos/gnomo1.png");
-//            lado = false;
         }
     }
 
@@ -74,7 +66,9 @@ public class Gnomo {
     public boolean detectarTortuga(int x, int y, int w, int h){                                                // Detecta colision.
     	return this.x < (x + w) && this.x + this.ancho > x && this.y < y + h && this.y + this.alto > y;
     }
-
+    public boolean detectarNave(int x, int y, int w, int h){                                                // Detecta colision.
+    	return this.x < (x + w) && this.x + this.ancho > x && this.y < y + h && this.y + this.alto > y;
+    }
 
     public boolean cooldown() {
         if (contTicks > 1) {
@@ -83,15 +77,6 @@ public class Gnomo {
         contTicks += 1;
         return true;
     }
-
-    /*
-    public boolean gnomoEstaApoyado(Islas isla) {
-        if (isla == null) return false;
-        boolean apoyado = this.detectarColision(isla.x, isla.y, isla.ancho, isla.alto);
-        this.estaApoyado = apoyado;
-        return apoyado || gnomoEstaApoyado(isla.izq) || gnomoEstaApoyado(isla.der);
-    }
-     */
 
     public boolean gnomoEstaApoyado(Islas isla) {
         if (isla == null) return false;
@@ -116,7 +101,7 @@ public class Gnomo {
             }
 
         if (!this.estaApoyado) {
-            this.y += 3;                                           // :tiger2:
+            this.y += 3;                                          
             direccionDefinida = false;                            // Caida del gnomo
         }
     }

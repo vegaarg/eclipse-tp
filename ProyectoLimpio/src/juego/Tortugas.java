@@ -27,7 +27,7 @@ public class Tortugas {
         this.y = y;
         this.ancho = ancho;
         this.alto = alto;
-        this.img =  Herramientas.cargarImagen("recursos/tortuga.png");
+        this.img =  Herramientas.cargarImagen("recursos/tortuga.gif");
         this.der =  Herramientas.cargarImagen("recursos/tortugaIzq.gif");
         this.izq =  Herramientas.cargarImagen("recursos/tortugaDer.gif");
         lado = false;
@@ -36,9 +36,6 @@ public class Tortugas {
         this.enCaida = false;
     }
 
-    public void dibujarHitbox(Entorno entorno){                                  //Dibuja un rectangulo azul. Esto vamos a usarlo
-        entorno.dibujarRectangulo(x, y, ancho, alto, 0, myColor);         //despues para ver la hitbox de la plataforma.
-    }
     public void dibujarse(Entorno entorno){
         entorno.dibujarImagen(this.img, this.x, this.y, 0, 0.1);   //Dibuja al personaje en pantalla
     }
@@ -140,14 +137,4 @@ public boolean cooldown() {
         }
     }
 
-//    public void tortugaIsla(Islas isla) {
-//    	if(enCaida) {
-//    		gravedadTortuga(isla);
-//    		if(!estaApoyado) {
-//    			
-//    			direccionTortuga(isla);
-//    		
-//    		}
-//    	}
-//    }
 }
