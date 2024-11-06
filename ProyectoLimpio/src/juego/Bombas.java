@@ -8,7 +8,6 @@ import entorno.Entorno;
 	    int y;
 	    int ancho;
 	    int alto;
-	//    private int contBombasTicks = 0;
 	    int velocidad = 1;
 	    boolean lado;
 	    Image img;
@@ -32,10 +31,15 @@ import entorno.Entorno;
 	            this.x -= velocidad;
 	        }
 	    }
+	    
 	    public void movimientoDerecha() {
 	        if (this.x < 850) {
 	            this.x += velocidad;
 	        }
 	    }
+
+		public boolean detectarBola(int x, int y, int w, int h){                                                // Detecta colision.
+        return this.x < (x + w) + 15 && this.x + this.ancho + 5 > x && this.y < (y + h) && this.y + this.alto > y;
+		}
 	    
 	}

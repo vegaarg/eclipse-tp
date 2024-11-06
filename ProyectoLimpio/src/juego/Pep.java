@@ -12,6 +12,8 @@ public class Pep {
     int y;
     int ancho;
     int alto;
+    Image lanzaDer;
+    Image lanzaIzq;
     Image imgDer;
     Image imgIzq;
     Image imgMovDer;
@@ -21,6 +23,7 @@ public class Pep {
     boolean seMueve;
     boolean estaApoyado;
     boolean saltando;
+    boolean lanzando;
     BolaDeFuego bola;
     int longSalto;
     int contTicks = 0;
@@ -32,6 +35,8 @@ public class Pep {
         this.y = y;
         this.ancho = ancho;
         this.alto = alto;
+        this.lanzaDer = Herramientas.cargarImagen("recursos/pepLanza.png");
+        this.lanzaIzq = Herramientas.cargarImagen("recursos/peplanza2.png");
         this.imgDer = Herramientas.cargarImagen("recursos/idlepepDer.gif");
         this.imgIzq = Herramientas.cargarImagen("recursos/idlepepIzq.gif");
         this.imgMovDer = Herramientas.cargarImagen("recursos/mover.gif");
@@ -39,6 +44,7 @@ public class Pep {
         this.seMueve = false;
         this.estaApoyado = false;
         this.saltando = false;
+        this.lanzando = false;
         this.longSalto=0;
         lado = false; // Lado de Pep (false=der, true=izq)
     }
@@ -47,20 +53,28 @@ public class Pep {
         entorno.dibujarRectangulo(x, y, ancho, alto, 0, myColor); // despues para ver la hitbox de la plataforma.
     }
     public void dibujarse(Entorno entorno) {
-        if (seMueve) {
-            if (lado) { // Muestra el GIF correspondiente según la dirección
+        if (lanzando) { 
+            if (lado) { 
+                entorno.dibujarImagen(this.lanzaIzq, this.x, this.y, 0, 0.7); // Dibuja el PNG de lanzamiento a la izquierda
+            } else {
+                entorno.dibujarImagen(this.lanzaDer, this.x, this.y, 0, 0.7); // Dibuja el PNG de lanzamiento a la derecha
+            } 
+        } else if (seMueve) { // Si no está lanzando, verifica si se está moviendo
+            if (lado) {
                 entorno.dibujarImagen(this.imgMovIzq, this.x, this.y, 0, 0.7); // Dibuja el GIF de movimiento a la izquierda
             } else {
                 entorno.dibujarImagen(this.imgMovDer, this.x, this.y, 0, 0.7); // Dibuja el GIF de movimiento a la derecha
             }
-        } else { // Cuando está parado:
+        } else { // Si no está lanzando ni moviéndose, está quieto
             if (lado) {
                 entorno.dibujarImagen(this.imgIzq, this.x, this.y, 0, 0.7); // Usa la imagen de quieto hacia la izquierda
             } else {
                 entorno.dibujarImagen(this.imgDer, this.x, this.y, 0, 0.7); // Usa la imagen de quieto hacia la derecha
             }
         }
+        
     }
+
 
     public void movimientoIzquierda() {
         if (this.x > 0) {
@@ -152,4 +166,18 @@ public class Pep {
     public int limiteInferior() {
     	return this.y + this.alto / 2;
     	}
+    public int getX() {
+        return this.x;
+    }
+
+    public int getY() {
+        return this.y;
+    }
+    public int getAncho() {
+        return this.ancho;
+    }
+
+    public int getAlto() {
+        return this.alto;
+    }
 }
