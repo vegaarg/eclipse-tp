@@ -19,7 +19,7 @@ public class Tortugas {
 	public boolean estaApoyado;
     boolean direccionDefinida;
 	public boolean detectarColision;
-	public static int contBombasTicks;
+	public static int contBombasTicks = 0;
 	public boolean enCaida;
 
     public Tortugas (int x, int y, int ancho, int alto, boolean lado){

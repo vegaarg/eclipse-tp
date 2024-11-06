@@ -22,6 +22,7 @@ import entorno.InterfaceJuego;
 	   private Bombas bomba;
 	   private BolaDeFuego bola;
 	   private Tortugas[] tortugasLista;
+	   private Tortugas[] tortugasLista2;
 	   private Gnomo[] gnomosLista;
 	   private Islas islaBase = new Islas(380, 80, 90, 20);
 	   private int enemigosEliminados=0;
@@ -43,6 +44,7 @@ import entorno.InterfaceJuego;
 	   private boolean escudoActivado = false;
 	   private boolean randomBooleano;
 	   private int tamanioLista = 4;
+	   private int tamanioLista2 = 4;
 	
 	// Inicializa el objeto entorno
 	
@@ -72,6 +74,7 @@ import entorno.InterfaceJuego;
 	       Casa = Herramientas.cargarImagen("recursos/casa.png");
 	       pep = new Pep(400, 450, 53, 48, Herramientas.cargarImagen("recursos/idlepepDer.gif"));
 	       tortugasLista = new Tortugas[tamanioLista];
+	       tortugasLista2 = new Tortugas[tamanioLista2];
 	       gnomosLista = new Gnomo[tamanioLista];
 	       if(temporizador == 100 || temporizador == 200 || temporizador == 300|| temporizador == 400 || temporizador == 500 ||temporizador == 150 || temporizador == 250 ) { ///eltemporizador se explica abajo
 	        for (int i = 0; i < tamanioLista; i++) {
@@ -79,6 +82,13 @@ import entorno.InterfaceJuego;
 	               tortugasLista[i] = new Tortugas(randomCaida(), 0, 5, 34, Utilidades.randomBoolean());
 	               tortugasLista[i].enCaida = true; 
 	               break;
+	           }
+	           if(Modalidad == 1) {
+		           if(tortugasLista2[i] == null) {
+		               tortugasLista2[i] = new Tortugas(randomCaida(), 0, 5, 34, Utilidades.randomBoolean());
+		               tortugasLista2[i].enCaida = true; 
+		               break;
+		           	}
 	           }
 	        }
 	       for (int i = 0; i < tamanioLista; i++) {
@@ -92,10 +102,17 @@ import entorno.InterfaceJuego;
 	//inicio juego
 		   
 	    if(pausa != true) {
-	    for (Tortugas tortuga : tortugasLista) {
-	       if (tortuga != null) {
-	           tortuga.actualizar(islaBase); // Llama a actualizar conla referencia de la isla
-	       		}
+	    	if(Modalidad == 1) {
+		    	for (Tortugas tortuga : tortugasLista2) {
+		 	       if (tortuga != null) {
+		 	           tortuga.actualizar(islaBase); // Llama a actualizar conla referencia de la isla
+		 	       		}
+		 	     	}
+	    		}
+	    	for (Tortugas tortuga : tortugasLista) {
+		       if (tortuga != null) {
+		           tortuga.actualizar(islaBase); // Llama a actualizar conla referencia de la isla
+		       		}
 	     	}
 	    }                                                      
 	    if (!inicio) {	// Si se presiona la barra espaciadora,comienza el juego en Modalidad normal
@@ -108,7 +125,7 @@ import entorno.InterfaceJuego;
 	           inicio = true;
 	           pausa = false;
 	           Modalidad = 1; // Modalidad difícil activado
-	           gnomosNecesarios = 1000;     
+	           gnomosNecesarios = 1000; 
 	       }
 	       // Si ninguna de las teclas estápresionada, mostrar pantalla de inicio
 	       else {
@@ -156,6 +173,16 @@ import entorno.InterfaceJuego;
 	            tortugasLista[i] = new Tortugas (randomCaida(), 50, 15, 34, Utilidades.randomBoolean());
 	            tortugasLista[i].enCaida = true; 
 	           } 
+	       }
+	       if(Modalidad == 1) {
+		       for (int i = 0; i < tamanioLista2; i++) {
+		           if (tortugasLista2[i] != null){
+		            tortugasLista2[i].dibujarse(entorno);
+		           } else if(temporizador == 150 || temporizador == 250 || temporizador == 350|| temporizador == 450 || temporizador == 550) { //temporizador para las nuevas tortugas
+		            tortugasLista2[i] = new Tortugas (randomCaida(), 50, 15, 34, Utilidades.randomBoolean());
+		            tortugasLista2[i].enCaida = true; 
+		           } 
+		       }
 	       }
 	      
 	//Spawn gnomos
@@ -214,25 +241,16 @@ import entorno.InterfaceJuego;
 	   colicionNaveYPep();
 	   
 	// Manejo de entrada para el movimiento de Pep
-	
 	       manejarMovimientoPep();
 	       pep.saltoYCaida(entorno); // Manejo de gravedad y saltos
 	
 	//bombas
-	
 	       manejarBomba();
-	
 	// Manejo de la bola de fuego
-	
 	       manejarBolaDeFuego();
-	
-	
 	// Manejo de colisiones
-	
 	       manejarColisiones();
-	
 	// Movimiento del gnomo
-	
 	       for (Gnomo gnomo:gnomosLista) {
 	           if (gnomo != null) {
 	               manejarColisionesGnomo(gnomo);
@@ -260,7 +278,21 @@ import entorno.InterfaceJuego;
 	           tortugaColision(i);
 	           tortugaPerdido(i);
 	       }
-	   }
+	       for (Tortugas tortuga:tortugasLista2) {
+	           if (tortuga != null) {
+	               manejarColisionesTortuga(tortuga);
+	           }
+	       }
+	       if(Modalidad == 1) {
+		       for (int i = 0; i < tamanioLista2; i++) {
+		           if (tortugasLista2[i] != null) {
+		               tortugasLista2[i].moverTortuga(islaBase);
+		           }
+		           tortugaColision(i);
+		           tortugaPerdido(i);
+		       }
+	       }
+	  }
 	
 	// Movimiento de pep
 	
@@ -286,11 +318,8 @@ import entorno.InterfaceJuego;
 	        return;
 	
 	            }
-	
 	           }
-	
 	       }
-	
 	   }
 	
 	// FUNCION ESCUDO
@@ -336,7 +365,7 @@ import entorno.InterfaceJuego;
 		    if (tortuga != null) {
 		       if (!tortuga.cooldownBomba()) {  // Accede a cooldown() a través de la instancia 'tortuga'
 		           if (temporizador == 100 || temporizador == 200 || temporizador == 300 || temporizador == 400 || temporizador == 500 ||
-		            temporizador == 600 || temporizador == 700 || temporizador == 800 || temporizador == 900) {
+		        		   temporizador == 600 || temporizador == 700 || temporizador == 800 || temporizador == 900) {
 		               bomba = new Bombas(tortuga.x, tortuga.y, 60, 49, tortuga.lado,
 		            		   Herramientas.cargarImagen(tortuga.lado ? "recursos/BombaDer.gif" : "recursos/BombaIzq.gif"));	
 		               Tortugas.contBombasTicks = 0;
@@ -351,6 +380,26 @@ import entorno.InterfaceJuego;
 	           }
 	       }
 	    }
+	    for (int i = 0; i < tortugasLista2.length; i++) {
+	    	Tortugas tortuga = tortugasLista2[i] ;
+		    if (tortuga != null) {
+		       if (!tortuga.cooldownBomba()) {  // Accede a cooldown() a través de la instancia 'tortuga'
+		           if (temporizador == 100 || temporizador == 200 || temporizador == 300 || temporizador == 400 || temporizador == 500 ||
+		            temporizador == 600 || temporizador == 700 || temporizador == 800 || temporizador == 900) {
+		               bomba = new Bombas(tortuga.x, tortuga.y, 60, 49, tortuga.lado,
+		            		   Herramientas.cargarImagen(tortuga.lado ? "recursos/BombaDer.gif" : "recursos/BombaIzq.gif"));	
+		               Tortugas.contBombasTicks = 0;
+		           }
+	       }else if (bomba != null) {
+	               bomba.dibujarse(entorno);
+	               if (bomba.lado) {
+	                   bomba.movimientoIzquierda();
+	               } else {
+	                   bomba.movimientoDerecha();
+	               }
+	       		}
+		    }
+		   }
 	  }
 	
 	    public void BombaColision() {
@@ -397,16 +446,16 @@ import entorno.InterfaceJuego;
 	       if (gnomosLista[num] == null){
 	           return;
 	           }
-	       if (pep.y >=340) {
+	       if (pep.y >= 330) {
 		       if (gnomosLista[num].detectarPep(pep.x, pep.y, pep.ancho, pep.alto)) { // Pep recoge al gnomo y le suma un punto
 		           gnomosLista[num] = null;
 		           gnomosSalvados++;
 		           Puntos += 100;
-			           if(Modalidad == 1 && gnomosSalvados % 15 == 0)
+			       if(Modalidad == 1 && gnomosSalvados % 10 == 0)
 			            vidasRestantes++;
-			           if(Modalidad == 1 && gnomosSalvados % 30 == 0)
-			        	   cantEscudos++;
-			        if(gnomosSalvados == gnomosNecesarios ) {
+			       if(Modalidad == 1 && gnomosSalvados % 20 == 0)
+			        	  cantEscudos++;
+			       if(gnomosSalvados == gnomosNecesarios ) {
 			            if(Puntos > PuntosAlto) {
 			            	PuntosAlto = Puntos;
 			            	}
@@ -442,11 +491,11 @@ import entorno.InterfaceJuego;
 							if (gnomo.detectarColision(Nave.x-50, Nave.y, Nave.ancho-15, Nave.alto)) { //Verifica si hay colisión		
 							gnomosLista[i] = null; // Elimina el gnomo	
 							gnomosSalvados++; // Aumenta contador de gnomos perdidos	
-							if(Modalidad == 1 && gnomosSalvados % 15 == 0)
+							if(Modalidad == 1 && gnomosSalvados % 10 == 0)
 							      vidasRestantes++;
-							if(Modalidad == 1 && gnomosSalvados % 30 == 0)
-							cantEscudos++;
-							Puntos += 50;
+							if(Modalidad == 1 && gnomosSalvados % 20 == 0)
+								cantEscudos++;
+								Puntos += 50;
 							}else if(gnomosSalvados >= gnomosNecesarios ) {
 							      finales = true; // Si pierde 20 gnomos, se pierde
 							      return;
@@ -462,13 +511,47 @@ import entorno.InterfaceJuego;
 	   private void manejarColisionesTortuga(Tortugas tortuga){
 	    tortuga.tortugaEstaApoyado(islaBase);
 	   }
-	       public void tortugaColision(int num) {
-		          if (tortugasLista[num] == null){
+	   public void tortugaColision(int num) {
+	          if (tortugasLista[num] == null){
+	              return;
+	              }
+	          for (int j = 0; j < tortugasLista.length; j++) {
+	              if (j != num && tortugasLista[j] != null) { // Evita comparar la misma tortuga consigo misma
+	                  Tortugas tortuga = tortugasLista[j];
+	                  
+	                  // Detectar colisión entre la tortuga actual y otra tortuga en la lista
+	                  if (tortugasLista[num].detectarColision(tortuga.x, tortuga.y, tortuga.ancho, tortuga.alto)) {
+	                      tortugasLista[j] = null;  // Elimina la segunda tortuga
+	                      break; // Sale del bucle después de eliminar una tortuga para evitar más colisiones en la misma iteración
+	                  }
+	              }
+	          }
+		          if (bola != null) {
+			          if (tortugasLista[num].detectarBola(bola.x, bola.y, bola.ancho, bola.alto)) { //Si la bola mata a una tortuga, sumaun punto
+				          tortugasLista[num] = null;
+				          bola = null;
+				          contTicks = 80;
+				          Puntos += 150;
+				          enemigosEliminados++;
+			          }
+		          }
+		          if (tortugasLista2[num] == null){
 		              return;
 		              }
+		          for (int j = 0; j < tortugasLista2.length; j++) {
+		              if (j != num && tortugasLista2[j] != null) { // Evita comparar la misma tortuga consigo misma
+		                  Tortugas tortuga = tortugasLista2[j];
+		                  
+		                  // Detectar colisión entre la tortuga actual y otra tortuga en la lista
+		                  if (tortugasLista2[num].detectarColision(tortuga.x, tortuga.y, tortuga.ancho, tortuga.alto)) {
+		                      tortugasLista2[j] = null;  // Elimina la segunda tortuga
+		                      break; // Sale del bucle después de eliminar una tortuga para evitar más colisiones en la misma iteración
+		                  }
+		              }
+		          }
 			          if (bola != null) {
-				          if (tortugasLista[num].detectarBola(bola.x, bola.y, bola.ancho, bola.alto)) { //Si la bola mata a una tortuga, sumaun punto
-					          tortugasLista[num] = null;
+				          if (tortugasLista2[num].detectarBola(bola.x, bola.y, bola.ancho, bola.alto)) { //Si la bola mata a una tortuga, sumaun punto
+					          tortugasLista2[num] = null;
 					          bola = null;
 					          contTicks = 80;
 					          Puntos += 150;
@@ -488,18 +571,35 @@ import entorno.InterfaceJuego;
 							    gnomosLista[i] = null;       // Eliminar el gnomo
 							    gnomosPerdidos++;            // Aumenta el contador de gnomos perdidos
 								    if(Modalidad == 1){
-								             Puntos -=50;
+								             Puntos -=10;
 								              }
 								    break;                       // Sale del bucle después de una colisión
 							    }
 						    if(gnomosPerdidos >= gnomosNecesarios) {
 						                finales = true; // Si pierde 20 gnomos, se pierde
 						        return;
-						               } 
+						               }
+						    for (int p = 0; p < tortugasLista2.length; p++ ) {
+							    Tortugas tortugas = tortugasLista2[p];
+								    if (tortugas != null) {
+									    if (gnomo.detectarColision(tortugas.x, tortugas.y, tortugas.ancho, tortugas.alto)) {      //Verifica si hay colisión
+									    gnomosLista[i] = null;       // Eliminar el gnomo
+									    gnomosPerdidos++;            // Aumenta el contador de gnomos perdidos
+										    if(Modalidad == 1){
+										             Puntos -=10;
+										        }
+										    break;                       // Sale del bucle después de una colisión
+									    }
+								    if(gnomosPerdidos >= gnomosNecesarios) {
+								                finales = true; // Si pierde 20 gnomos, se pierde
+								        return;
+								               }     
+								    	}
+								    }
+						    	}
 						    }
-					    }
-				    }
-			    }
+					   }
+				  }
 		    }
 	       
 	    public void tortugaPerdido(int num) {
@@ -523,6 +623,26 @@ import entorno.InterfaceJuego;
 				          }
 			    }
 		    }
+		    if (tortugasLista2[num] == null){
+	    		return;
+	    	}
+		    if (tortugasLista2[num].y > 700) {
+			    tortugasLista2[num] = null;
+			    } else if(!escudoActivado) { 
+				    if(tortugasLista2[num].detectarPep(pep.x, pep.y, pep.ancho, pep.alto)) {
+				           pep = null;
+				           pep = new Pep(400, 450, 53, 48, Herramientas.cargarImagen("recursos/pepDer.png"));
+				           vidasRestantes--;
+				           if(vidasRestantes<=0) {
+				            finales = true; // Si a Pep lo mata una tortuga y tenía una sola vida, lo lleva aun final
+				        return;}
+				    }else {
+				    if(tortugasLista2[num].detectarPep(pep.x, pep.y, pep.ancho, pep.alto)) {
+				          escudoActivado=false;
+				          cantEscudos-- ;
+				          }
+			    }
+		    }  
 	    }
 	
 		public static void main(String[] args) {
