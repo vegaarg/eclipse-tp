@@ -19,7 +19,7 @@ public class Tortugas {
 	public boolean estaApoyado;
     boolean direccionDefinida;
 	public boolean detectarColision;
-	public int contTicks;
+	public static int contBombasTicks;
 	public boolean enCaida;
 
     public Tortugas (int x, int y, int ancho, int alto, boolean lado){
@@ -67,11 +67,11 @@ public boolean detectarBola(int x, int y, int w, int h){                        
     return this.x < (x + w) + 15 && this.x + this.ancho + 5 > x && this.y < (y + h) && this.y + this.alto > y;
 }
 
-public boolean cooldown() {
-    if (contTicks > 20) {
+public boolean cooldownBomba() {
+    if (contBombasTicks > 800) {
         return false;
     }
-    contTicks += 1;
+    contBombasTicks += 1;
     return true;
 }
     public boolean tortugaEstaApoyado(Islas isla) {

@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Image;
 import entorno.Entorno;
 import entorno.Herramientas;
-
 import static java.lang.Math.min;
 
 public class Pep {
@@ -107,6 +106,9 @@ public class Pep {
 
     public boolean detectarColision(int x, int y, int w, int h){ // Detecta colision
         return this.x < (x + w) && this.x + this.ancho > x && this.y < y + h && this.y + this.alto > y + 13;
+    }
+    public boolean detectarBomba(int x, int y, int w, int h){                                                // Detecta colision.
+        return this.x < (x + w) + 15 && this.x + this.ancho + 5 > x && this.y < (y + h) && this.y + this.alto > y;
     }
 
     public String ladoColision(int x, int y, int w, int h){

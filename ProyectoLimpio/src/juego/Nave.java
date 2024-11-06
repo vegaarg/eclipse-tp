@@ -14,7 +14,7 @@ public class Nave {
 	boolean estaEncendido;
 	boolean direccion;
 	
-	public Nave(int x, int y,int alto, int ancho){
+	public Nave(int x, int y,int ancho, int alto){
 		this.x = x;
 		this.y = y;
         this.ancho = ancho;
