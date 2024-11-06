@@ -2,7 +2,6 @@ package juego;
 
 import java.awt.Color;
 import java.awt.Image;
-
 import entorno.Entorno;
 import entorno.Herramientas;
 
@@ -32,10 +31,9 @@ public class Gnomo {
         direccionDefinida = false;
     }
 
-
     public void dibujarse(Entorno entorno){
         if (lado) {
-            entorno.dibujarImagen(this.imgDer, this.x, this.y, 0, 1);     //Dibuja al personaje en pantalla, Si lado es falso dibuja el izquierdo, si es true, muestra el derecho.
+            entorno.dibujarImagen(this.imgDer, this.x, this.y, 0, 1); //Dibuja al personaje en pantalla (false=izq, true=der)
         } else {
             entorno.dibujarImagen(this.imgIzq, this.x, this.y, 0, 1);
         }
@@ -53,20 +51,18 @@ public class Gnomo {
         }
     }
 
-
-    public boolean detectarColision(int x, int y, int w, int h){                                                // Detecta colision.
-        return this.x < (x + w) - 10 && this.x + this.ancho > x - 30 && this.y < y + h && this.y + this.alto > y + 3;
-        
+    public boolean detectarColision(int x, int y, int w, int h){ // Detecta colision
+        return this.x < (x + w) - 10 && this.x + this.ancho > x - 30 && this.y < y + h && this.y + this.alto > y + 3;    
     }
     
-    public boolean detectarPep(int x, int y, int w, int h){                                                // Detecta colision.
+    public boolean detectarPep(int x, int y, int w, int h){ // Detecta colision de Pep
         return this.x < (x + w) && this.x + this.ancho > x && this.y < y + h && this.y + this.alto > y;
         
     }
-    public boolean detectarTortuga(int x, int y, int w, int h){                                                // Detecta colision.
+    public boolean detectarTortuga(int x, int y, int w, int h){ // Detecta colision de Tortuga
     	return this.x < (x + w) && this.x + this.ancho > x && this.y < y + h && this.y + this.alto > y;
     }
-    public boolean detectarNave(int x, int y, int w, int h){                                                // Detecta colision.
+    public boolean detectarNave(int x, int y, int w, int h){ // Detecta colision de Nave
     	return this.x < (x + w) && this.x + this.ancho > x && this.y < y + h && this.y + this.alto > y;
     }
 
@@ -89,21 +85,18 @@ public class Gnomo {
 
             if (this.estaApoyado) {
                 if (!direccionDefinida) {
-                    this.lado = Utilidades.randomBoolean(); //random();
+                    this.lado = Utilidades.randomBoolean();
                     direccionDefinida = true;
                 }
                 if (this.lado) {
                     this.movimientoDerecha();
-
                 } else {
                     this.movimientoIzquierda();
                 }
             }
-
         if (!this.estaApoyado) {
             this.y += 3;                                          
-            direccionDefinida = false;                            // Caida del gnomo
+            direccionDefinida = false; // Caida del gnomo
         }
     }
-
 } 

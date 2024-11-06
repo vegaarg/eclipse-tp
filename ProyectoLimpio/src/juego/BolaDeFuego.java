@@ -3,6 +3,7 @@ package juego;
 import java.awt.Color;
 import java.awt.Image;
 import entorno.Entorno;
+
 public class BolaDeFuego {
     int x;
     int y;
@@ -23,7 +24,7 @@ public class BolaDeFuego {
     }
 
     public void dibujarse(Entorno entorno){
-        entorno.dibujarImagen(this.img, this.x, this.y, 0, 0.3);    //Dibuja la bola de fuego en pantalla
+        entorno.dibujarImagen(this.img, this.x, this.y, 0, 0.3); //Dibuja la bola de fuego en pantalla
     }
 
     public void movimientoIzquierda() {

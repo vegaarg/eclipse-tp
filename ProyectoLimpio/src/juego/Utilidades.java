@@ -7,5 +7,4 @@ public class Utilidades {
         Random random = new Random();
         return random.nextBoolean();
     }
-
 }

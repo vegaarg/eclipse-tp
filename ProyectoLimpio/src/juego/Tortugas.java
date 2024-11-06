@@ -65,7 +65,6 @@ public boolean detectarPep(int x, int y, int w, int h){                         
 }
 public boolean detectarBola(int x, int y, int w, int h){                                                // Detecta colision.
     return this.x < (x + w) + 15 && this.x + this.ancho + 5 > x && this.y < (y + h) && this.y + this.alto > y;
-    
 }
 
 public boolean cooldown() {
@@ -77,7 +76,7 @@ public boolean cooldown() {
 }
     public boolean tortugaEstaApoyado(Islas isla) {
         if (isla == null) return false;
-        boolean apoyado = this.detectarColision(isla.x, isla.y, isla.ancho, isla.alto);                /// deberia ser un metodo
+        boolean apoyado = this.detectarColision(isla.x, isla.y, isla.ancho, isla.alto);
         this.estaApoyado = apoyado;
         return apoyado || tortugaEstaApoyado(isla.izq) || tortugaEstaApoyado(isla.der);
     }
@@ -86,7 +85,7 @@ public boolean cooldown() {
 
             if (this.estaApoyado) {
                 if (!direccionDefinida) {
-                    this.lado = Utilidades.randomBoolean(); //random();
+                    this.lado = Utilidades.randomBoolean();
                     direccionDefinida = true;
                 }
                 if (this.lado) {
@@ -96,27 +95,20 @@ public boolean cooldown() {
                     this.movimientoIzquierda();
                 }
             }        
-
     }
-    // Caida de tortuga
+// Caida de tortuga
     public void gravedadTortuga(Islas isla) {
-        // Verifica si la tortuga está apoyada en la isla
-        this.estaApoyado = tortugaEstaApoyado(isla);
+        this.estaApoyado = tortugaEstaApoyado(isla); // Verifica si la tortuga está apoyada en la isla
         if (!this.estaApoyado && enCaida== true) {
             this.y += 1; // Aplica gravedad para que caiga
-            
-
         }
     }
 
     public void direccionTortuga(Islas isla) {
-        // Cambia la dirección de la tortuga cuando esté apoyada
-        if (!estaApoyado) {
-            // Alterna la dirección si está apoyada
-            lado = !lado;
+        if (!estaApoyado) { // Cambia la dirección de la tortuga cuando esté apoyada
+            lado = !lado; // Alterna la dirección si está apoyada
         }
-        // Movimiento en la dirección actual
-	        if (lado) {
+	        if (lado) { // Movimiento en la dirección actual
 	        	this.x -=1;
 	            movimientoIzquierda();
 	        } else {
@@ -136,5 +128,4 @@ public boolean cooldown() {
             direccionTortuga(isla); // Mueve lateralmente si no está cayendo
         }
     }
-
 }

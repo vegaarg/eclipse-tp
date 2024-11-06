@@ -3,6 +3,7 @@ package juego;
 import java.awt.Color;
 import entorno.Entorno;
 import java.awt.Rectangle;
+
 public class Colision {
     int x;
     int y;

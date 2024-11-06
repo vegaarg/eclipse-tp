@@ -4,9 +4,7 @@ import java.awt.Image;
 
 import entorno.Herramientas;
 
-public class Nave 
-{
-	// Variables de instancia
+public class Nave {
 	int x;
     int y;
     int ancho;
@@ -34,8 +32,7 @@ public class Nave
 	    else if (mouseX < this.x) {// Si el mouse está a la izquierda de la nave, mover a la izquierda
 	    	this.direccion= true;
 	        this.x -= 1; // Ajusta la velocidad si es necesario
-	    }
-	    
+	    } 
 	}
 	public double getX() {
 		return x;
@@ -59,4 +56,3 @@ public class Nave
 		this.direccion = false;
 	}
 }
-

@@ -6,7 +6,6 @@ import java.awt.Rectangle; //
 import entorno.Entorno;
 import entorno.Herramientas;
 
-
 public class Islas {
     int ancho;
     int alto;
@@ -62,5 +61,4 @@ public class Islas {
         popular(n-1, isla.izq);
         popular(n-1, isla.der);
     }
-
 }
