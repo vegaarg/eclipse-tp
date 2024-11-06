@@ -2,6 +2,7 @@ package juego;
 
 import java.awt.Color;
 import java.awt.Image;
+import java.util.Arrays;
 import java.util.Random;
 import entorno.Entorno;
 import entorno.Herramientas;
@@ -25,6 +26,7 @@ public class Juego extends InterfaceJuego {
     private Islas islaBase = new Islas(380, 80, 90, 20);
     private int enemigosEliminados=0;
     private int gnomosSalvados;
+    private int gnomosNecesarios;
     private int gnomosPerdidos;
     private int vidasRestantes;
     private int cantEscudos = 3;
@@ -33,15 +35,16 @@ public class Juego extends InterfaceJuego {
     private int contTicks;
     private int tiempo;
     private int segundos;
-    private int temporizador=1000;
+    private int temporizador=1000;    
+    private int Modalidad = 0;
     private boolean pausa = false;
     private boolean finales = false;
     private boolean inicio = false;
     private boolean escudoActivado = false;
     private boolean randomBooleano;
-    private final int tamanioLista = 4;
-    private final int tamanioListaTortugas = 4;
-    
+    private int tamanioLista = 4;
+    private int tamanioListaTortugas = 4;
+
  // Inicializa el objeto entorno
     public Juego() {
         this.entorno = new Entorno(this, "Al rescate de los gnomos", 800, 600);
@@ -94,14 +97,27 @@ public class Juego extends InterfaceJuego {
     	  }
     	}                                                      
     	if (!inicio) {
-            if (entorno.estaPresionada(' ') || entorno.estaPresionada(entorno.TECLA_ESCAPE)) {// Comienza el juego con espacio
-                inicio = true;
-                pausa = false;
-            } else {
-                mostrarPantallaInicio();
-                return;
-            }
-        }
+    	    // Si se presiona la barra espaciadora, comienza el juego en Modalidad normal
+    	    if (entorno.estaPresionada(' ')) {
+    	        inicio = true;
+    	        pausa = false;
+    	        gnomosNecesarios = 20;
+    	    }
+    	    // Si se presiona la tecla 'u' o la flecha izquierda, comienza en Modalidad difícil
+    	    else if (entorno.estaPresionada('u') ) {
+    	        inicio = true;
+    	        pausa = false;
+    	        Modalidad = 1; // Modalidad difícil activado
+    	        gnomosNecesarios = 1000;
+    	        tamanioLista = 5;
+
+    	    }
+    	    // Si ninguna de las teclas está presionada, mostrar pantalla de inicio
+    	    else {
+    	        mostrarPantallaInicio();
+    	        return;
+    	    }
+    	}
     	contador();
     	tiempo();
     	colisionGnomosYtortugas();
@@ -167,6 +183,11 @@ public class Juego extends InterfaceJuego {
         entorno.escribirTexto("Tiempo Transcurrido: " + segundos, 8, 150);
         entorno.escribirTexto("Puntos: " + Puntos, 8, 175);
         entorno.escribirTexto("Mejor Puntaje: " + PuntosAlto, 8, 200);
+        if(Modalidad == 1) {
+        	entorno.cambiarFont("Impact", 20, Color.red);
+        	entorno.escribirTexto("Modo Infinito", 8, 590);
+        }
+        
         
 // Nave
 
@@ -360,7 +381,11 @@ public class Juego extends InterfaceJuego {
 	            gnomosLista[num] = null;
 	            gnomosSalvados++;
 	            Puntos += 100;
-	            if(gnomosSalvados == 10) {
+	            if(Modalidad == 1 && gnomosSalvados % 15 == 0)
+	            	vidasRestantes++;
+	            if(Modalidad == 1 && gnomosSalvados % 30 == 0)
+					cantEscudos++;
+	            if(gnomosSalvados == gnomosNecesarios ) {
 	            	 if(Puntos > PuntosAlto) {
 	         			PuntosAlto = Puntos;
 	         		}
@@ -600,15 +625,19 @@ public class Juego extends InterfaceJuego {
 						if (gnomo.detectarColision(Nave.x-50, Nave.y, Nave.ancho-15, Nave.alto)) { // Verifica si hay colisión
 						gnomosLista[i] = null; // Elimina el gnomo
 						gnomosSalvados++; // Aumenta contador de gnomos perdidos
+						if(Modalidad == 1 && gnomosSalvados % 15 == 0)
+				        	vidasRestantes++;
+						if(Modalidad == 1 && gnomosSalvados % 30 == 0)
+							cantEscudos++;
 						Puntos += 50;
-						if(gnomosSalvados >= 20) {
+						}else if(gnomosSalvados >= gnomosNecesarios ) {
 			            	finales = true; // Si pierde 20 gnomos, se pierde
 			    			return;
 			            		}	
 							}
 					    }
 					}
-			}
+			
 		}
 	private void colicionNaveYPep() {
 		if(pep != null) {
